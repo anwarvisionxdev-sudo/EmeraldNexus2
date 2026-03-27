@@ -8,7 +8,7 @@
 // --- 1. GLOBAL DATABASE & STATE ---
 // ==========================================
 const playlist = [
-    { name: "snowfall", src: "snowfall.mp3", cover: "snowfall.jpg" },
+    { name: "snowfall", src: "snowfall.mp3", cover: "snowfall.webp" },
 ];
 
 const sectors = [
