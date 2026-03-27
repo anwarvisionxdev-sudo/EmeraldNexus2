@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emerald Nexus | Windows 11 Xbox Edition</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="mask-icon" href="favicon.svg" color="#00ff88">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<style>
+/* --- RESPONSIVE SIDEBAR ENGINE --- */
+:root {
+    --sidebar-width: 260px;
+    --sidebar-collapsed: 80px;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    white-space: nowrap; /* Agar teks tidak turun ke bawah saat menyempit */
+}
+
+/* KETIKA LAYAR KECIL (MOBILE) */
+@media (max-width: 768px) {
+    .sidebar {
+        width: var(--sidebar-collapsed);
+    }
+    
+    .sidebar h2, .sidebar span, .sidebar p {
+        display: none; /* Sembunyikan teks, sisakan ikon saja */
+    }
+
+    .sidebar .nav-link {
+        justify-content: center;
+        padding: 15px 0;
+    }
+
+    .main-content {
+        margin-left: 10px; /* Berikan ruang lebih untuk konten utama */
+    }
+}
+
+/* EFEK HOVER PADA MOBILE (OPSIONAL: Biar muncul lagi kalau disentuh) */
+@media (max-width: 768px) {
+    .sidebar:hover {
+        width: var(--sidebar-width);
+    }
+    .sidebar:hover h2, .sidebar:hover span, .sidebar:hover p {
+        display: inline;
+        margin-left: 10px;
+    }
+}
+
+/* Sembunyikan Label Grup saat Sidebar mengecil di Mobile */
+@media (max-width: 768px) {
+    .nav-label {
+        display: none; /* Judul grup menghilang agar tidak berantakan */
+    }
+    
+    .nav-item {
+        justify-content: center; /* Ikon berada di tengah saat teks hilang */
+        padding: 15px 0;
+    }
+
+    .nav-item span {
+        display: none; /* Sembunyikan teks menu */
+    }
+}
+
+/* Efek saat Sidebar di-hover (Opsional) */
+.sidebar:hover .nav-label {
+    display: block;
+    font-size: 10px;
+    margin-left: 10px;
+    opacity: 0.5;
+}
+
+.sidebar:hover .nav-item span {
+    display: inline;
+    margin-left: 10px;
+}
+</style>
+
+<body>
+    <audio id="ambientEntrance" src="https://www.myinstants.com/media/sounds/portal_ambient.mp3"></audio>
+
+    <canvas id="stormCanvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: -1;"></canvas>
+
+    <audio id="sfxExperience" src="https://www.myinstants.com/media/sounds/minecraft_xp_sound_effect.mp3"></audio>
+
+    <header class="top-header">
+    <button class="hamburger-btn" id="menuToggle" onclick="toggleSidebar()">
+        <i data-lucide="menu"></i>
+    </button>
+    
+</header>
+
+<nav id="navSidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h2>Navigator</h2>
+        <button class="close-btn" onclick="toggleSidebar()">
+            <i data-lucide="x"></i>
+        </button>
+    </div>
+    <ul class="nav-links">
+        <li><a href="index.html"><i data-lucide="home"></i> Home</a></li>
+        <li><a href="admin.html"><i data-lucide="alert-triangle"></i> Kepunahan</a></li>
+        <li><a href="paleontology.html"><i data-lucide="skull"></i> Paleontologi</a></li>
+        <li><a href="sea.html"><i data-lucide="fish"></i> Sea-creatures</a></li>
+        <li><a href="paleo-dino.html"><i data-lucide="bone"></i> Dino</a></li>
+        <li><a href="botany.html"><i data-lucide="leaf"></i> Paleo-botany</a></li>
+        <li><a href="zoo.html"><i data-lucide="paw-print"></i> ZOOLOGY</a></li>
+        <li><a href="aqua.html"><i data-lucide="waves"></i> MARINE LIFE</a></li>
+        <li><a href="astro.html"><i data-lucide="orbit"></i> ASTRONOMI</a></li>
+        <li><a href="galaxy.html"><i data-lucide="star"></i> GALAXY</a></li>
+    </ul>
+</nav>
+
+    <main>
+        <div class="temporal-widget">
+    <div id="live-clock">00:00:00</div>
+    <div id="live-date">Loading Temporal Data...</div>
+</div>
+
+<div class="status-bar">
+    <div id="clock" class="digital-clock">00:00:00</div>
+    <div id="weather-hub" class="weather-container">
+        <span id="weather-icon">--</span>
+        <span id="temp-value">00</span>°C
+        <small id="location-name">Detecting...</small>
+    </div>
+</div>
+
+<section id="megalodon-jaw-section" style="margin-top: 100px; padding: 60px 20px; background: rgba(0, 0, 0, 0.8); border: 2px solid #ff4d4d; border-radius: 40px; box-shadow: 0 0 50px rgba(255, 77, 77, 0.2);">
+    
+    <div style="text-align: center; margin-bottom: 50px;">
+        <h1 style="color: #ff4d4d; font-family: 'Orbitron', sans-serif; text-shadow: 0 0 20px #ff4d4d;">MEGALODON: THE CHOMP OF HISTORY</h1>
+        <p style="color: #ccc; max-width: 700px; margin: auto; line-height: 1.6;">Menjelajahi bukti nyata dari predator laut terbesar yang pernah ada, melalui sisa-sisa gigitannya.</p>
+    </div>
+
+    <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: center;">
+        
+        <div style="flex: 1.5; min-width: 320px;">
+            <h3 style="color: #ff4d4d; border-left: 4px solid #ff4d4d; padding-left: 15px; font-family: 'Orbitron', sans-serif;">RAHANG YANG BISA MENELAN MOBIL</h3>
+            <p style="color: #ddd; line-height: 1.8; text-align: justify;">
+                Rekonstruksi rahang Megalodon menunjukkan ukuran yang mengerikan. Mulutnya yang terbuka lebar bisa mencapai tinggi **1.8 hingga 2 meter** dan lebar **3 meter**.
+            </p>
+            
+            <div style="background: rgba(255, 77, 77, 0.1); padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 77, 77, 0.3); margin-top: 20px;">
+                <h4 style="color: #ff4d4d; margin-top: 0;">Skala Rahang Megalodon:</h4>
+                <ul style="color: #ccc; font-size: 13px; line-height: 1.6; padding-left: 20px;">
+                    <li>Kekuatan Gigitan: Diperkirakan 108.000 hingga 182.000 Newton (T-Rex hanya ~35.000).</li>
+                    <li>Jumlah Gigi: Sekitar 276 gigi dalam 5 baris.</li>
+                    <li>Kemampuan Menelan: Bisa melahap paus kecil utuh atau seekor sapi.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 20px;">
+            <div class="img-container skeleton">
+                <img src="mega-mouth.jpg" 
+                     alt="Megalodon Jaw Reconstruction" 
+                     loading="lazy" onload="this.parentElement.classList.remove('skeleton')" class="card-img-external">
+                <p class="img-caption">Rekonstruksi rahang Megalodon yang menakjubkan.</p>
+            </div>
+            
+            <div class="img-container skeleton">
+                <img src="istockphoto-1047047878-170667a.jpg" 
+                     alt="Megalodon vs White Shark Tooth" 
+                     loading="lazy" onload="this.parentElement.classList.remove('skeleton')" class="card-img-external">
+                <p class="img-caption captions-red">[SKELETON]: Gigi Megalodon (kiri) vs Gigi Hiu Putih (kanan).</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section id="paleozoic-pioneers-section" style="margin-top: 100px; padding: 40px 20px; background: linear-gradient(135deg, #1a1a00, #000); border-radius: 30px; border: 2px solid #ccaa00; box-shadow: 0 0 40px rgba(204, 170, 0, 0.2);">
+    
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h2 style="color: #ffcc00; font-family: 'Orbitron', sans-serif; text-shadow: 0 0 15px #ffcc00;">THE PALEOZOIC PIONEERS</h2>
+        <p style="color: #aaa; font-size: 14px;">Ikan legendaris, berperisai baja, dan perintis kehidupan darat.</p>
+    </div>
+
+    <div class="mobile-only-hint" style="color: #ffcc00;">
+        <span>GESER</span>
+        <div class="arrow-blink">→</div>
+    </div>
+
+    <div class="amber-cards-container" style="display: flex; gap: 20px; overflow-x: auto; padding: 20px 10px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+        
+        <div class="amber-card glassmorphism-amber">
+            <div class="card-tag">Baja Purba</div>
+            <div class="img-container skeleton">
+                <img src="Dunkleosteus-1.jpg" 
+                     alt="Dunkleosteus Restoration" loading="lazy" onload="this.parentElement.classList.remove('skeleton')" class="card-img-external">
+            </div>
+            <div class="card-header">
+                <h3>Dunkleosteus</h3>
+                <div class="species-label">[PLACODERMI]</div>
+            </div>
+            <p class="card-desc">Ikan berperisai tulang tebal. Tidak punya gigi, tapi tulang rahangnya setajam pisau guillotine.</p>
+            <div class="card-stats-row">
+                <div class="stat-item"><span class="stat-label">Panjang:</span> ~6m</div>
+                <div class="stat-item"><span class="stat-label">Masa:</span> 380-360 JTL (Devon)</div>
+            </div>
+        </div>
+
+        <div class="amber-card glassmorphism-amber">
+            <div class="card-tag tag-green">Fosil Hidup</div>
+            <div class="img-container skeleton">
+                <img src="Coelacanth.jpg" 
+                     alt="Coelacanth Illustration" loading="lazy" onload="this.parentElement.classList.remove('skeleton')" class="card-img-external">
+            </div>
+            <div class="card-header">
+                <h3>Coelacanth</h3>
+                <div class="species-label label-green">[ACTINISTIA]</div>
+            </div>
+            <p class="card-desc">Ikan legendaris yang dianggap punah 66 JTL, namun ditemukan masih hidup di laut modern.</p>
+            <div class="card-stats-row stats-green">
+                <div class="stat-item"><span class="stat-label">Panjang:</span> ~2m</div>
+                <div class="stat-item"><span class="stat-label">Masa:</span> 400 JTL - Sekarang</div>
+            </div>
+        </div>
+
+        <div class="amber-card glassmorphism-amber">
+            <div class="card-tag">Sirip Berotot</div>
+            <div class="img-container skeleton">
+                <img src="eusthenopteron.jpg" 
+                     alt="Eusthenopteron Restoration" loading="lazy" onload="this.parentElement.classList.remove('skeleton')" class="card-img-external">
+            </div>
+            <div class="card-header">
+                <h3>Eusthenopteron</h3>
+                <div class="species-label">[TETRAPODOMORPHA]</div>
+            </div>
+            <p class="card-desc">Ikan sirip berdaging yang memiliki struktur tulang sirip menyerupai lengan hewan darat.</p>
+            <div class="card-stats-row">
+                <div class="stat-item"><span class="stat-label">Panjang:</span> ~1.5m</div>
+                <div class="stat-item"><span class="stat-label">Masa:</span> 385 JTL (Devon)</div>
+            </div>
+        </div>
+
+        <div class="amber-card glassmorphism-amber">
+            <div class="card-tag">Perintis Darat</div>
+            <div class="img-container skeleton">
+                <img src="Tiktaalik-scaled.jpg" 
+                     alt="Tiktaalik Illustration" loading="lazy" onload="this.parentElement.classList.remove('skeleton')" class="card-img-external">
+            </div>
+            <div class="card-header">
+                <h3>Tiktaalik</h3>
+                <div class="species-label">[THE PIONEER]</div>
+            </div>
+            <p class="card-desc">"Ikan yang berjalan". Memiliki sirip kuat seperti kaki dan paru-paru primitif untuk bernapas di darat.</p>
+            <div class="card-stats-row">
+                <div class="stat-item"><span class="stat-label">Panjang:</span> ~1-3m</div>
+                <div class="stat-item"><span class="stat-label">Masa:</span> 375 JTL (Devon)</div>
+            </div>
+        </div>
+
+    </div>
+    
+    <section id="ocean-guardians-section" style="margin-top: 50px; padding: 40px 20px; background: linear-gradient(135deg, #1a1a00, #000); border-radius: 30px; border: 2px solid #ccaa00; box-shadow: 0 0 40px rgba(204, 170, 0, 0.2);">
+    
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h2 style="color: #ffcc00; font-family: 'Orbitron', sans-serif; text-shadow: 0 0 15px #ffcc00;">THE ANCIENT OCEAN GUARDIANS</h2>
+        <p style="color: #aaa; font-size: 14px;">Para penyintas dengan zirah pelindung dan desain purba yang sempurna.</p>
+    </div>
+
+    <div class="mobile-only-hint" style="color: #ffcc00;">
+        <span>GESER</span>
+        <div class="arrow-blink">→</div>
+    </div>
+
+    <div class="amber-cards-container" style="display: flex; gap: 20px; overflow-x: auto; padding: 20px 10px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+        
+        <div class="amber-card glassmorphism-amber">
+            <div class="card-tag">Benteng Laut</div>
+            <div class="img-container skeleton">
+                <img src="archelon.jpg" 
+                     alt="Archelon Restoration" loading="lazy" onload="this.parentElement.classList.remove('skeleton')" class="card-img-external">
+            </div>
+            <div class="card-header">
+                <h3>Archelon</h3>
+                <div class="species-label">[TESTUDINES]</div>
+            </div>
+            <p class="card-desc">Penyu terbesar yang pernah ada. Ukurannya menyamai mobil kecil dengan kulit tebal sebagai pengganti cangkang keras.</p>
+            <div class="card-stats-row">
+                <div class="stat-item"><span class="stat-label">Lebar:</span> ~4.5m</div>
+                <div class="stat-item"><span class="stat-label">Masa:</span> 80-66 JTL (Kapur)</div>
+            </div>
+        </div>
+
+        <div class="amber-card glassmorphism-amber">
+            <div class="card-tag">Penghancur Kerang</div>
+            <div class="img-container skeleton">
+                <img src="placodont.jpg" 
+                     alt="Placodont Illustration" loading="lazy" onload="this.parentElement.classList.remove('skeleton')" class="card-img-external">
+            </div>
+            <div class="card-header">
+                <h3>Placodont</h3>
+                <div class="species-label">[PLACODONTIA]</div>
+            </div>
+            <p class="card-desc">Reptil dengan gigi tumpul yang sangat kuat untuk menghancurkan cangkang moluska di dasar laut Trias.</p>
+            <div class="card-stats-row">
+                <div class="stat-item"><span class="stat-label">Panjang:</span> ~2m</div>
+                <div class="stat-item"><span class="stat-label">Masa:</span> 245-200 JTL (Trias)</div>
+            </div>
+        </div>
+
+        <div class="amber-card glassmorphism-amber">
+            <div class="card-tag tag-green">Legenda Hidup</div>
+            <div class="img-container skeleton">
+                <img src="nautilus.jpg" 
+                     alt="Nautilus Photo" loading="lazy" onload="this.parentElement.classList.remove('skeleton')" class="card-img-external">
+            </div>
+            <div class="card-header">
+                <h3>Nautilus</h3>
+                <div class="species-label label-green">[CEPHALOPODA]</div>
+            </div>
+            <p class="card-desc">Kerabat dekat Ammonite yang berhasil selamat dari kepunahan massal. Memiliki cangkang yang indah secara geometris.</p>
+            <div class="card-stats-row stats-green">
+                <div class="stat-item"><span class="stat-label">Diameter:</span> ~20cm</div>
+                <div class="stat-item"><span class="stat-label">Masa:</span> 500 JTL - Sekarang</div>
+            </div>
+        </div>
+
+        <div class="amber-card glassmorphism-amber">
+            <div class="card-tag">Hiu Berduri</div>
+            <div class="img-container skeleton">
+                <img src="hybodus.jpg" 
+                     alt="Hybodus Illustration" loading="lazy" onload="this.parentElement.classList.remove('skeleton')" class="card-img-external">
+            </div>
+            <div class="card-header">
+                <h3>Hybodus</h3>
+                <div class="species-label">[HYBODONTIFORMES]</div>
+            </div>
+            <p class="card-desc">Hiu purba dengan duri di punggung. Memiliki dua jenis gigi: satu untuk menggigit, satu untuk menghancurkan cangkang.</p>
+            <div class="card-stats-row">
+                <div class="stat-item"><span class="stat-label">Panjang:</span> ~2m</div>
+                <div class="stat-item"><span class="stat-label">Masa:</span> 260-66 JTL</div>
+            </div>
+        </div>
+
+    </div>
+</section>
+</section>
+
+<section id="sea-creatures" style="padding: 60px 20px; background: linear-gradient(to bottom, #000b1a, #001a1a); border-radius: 40px; margin-top: 50px;">
+    
+    <div style="text-align: center; margin-bottom: 50px;">
+        <h2 style="color: #00d4ff; font-family: 'Orbitron', sans-serif; text-shadow: 0 0 15px #00d4ff;">REPTIL LAUT DAN MAKHLUK LAUT: PENGUASA KEDALAMAN</h2>
+        <p style="color: #aaa; font-size: 14px;">Bukan dinosaurus, melainkan reptil,mamalia,dan mahkluk lainnya yang berevolusi kembali ke lautan.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+
+        <div class="sea-monster-card">
+            <div class="badge-tag">Puncak Predator</div>
+            <img src="mossa.jpg" loading="lazy" alt="Mosasaurus">
+            <div class="card-content">
+                <h3>Mosasaurus</h3>
+                <p>Predator puncak Era Kapur (Cretaceous). Memiliki rahang ganda yang bisa menelan mangsa bulat-bulat, mirip ular modern.</p>
+                <div class="stat-box">
+                    <span>Panjang: 17-18m</span> | <span>Masa: 70-66 JTL</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sea-monster-card">
+            <div class="badge-tag">Leher Panjang</div>
+            <img src="plesio.jpg" loading="lazy" alt="Plesiosaurus">
+            <div class="card-content">
+                <h3>Plesiosaurus</h3>
+                <p>Dikenal karena lehernya yang sangat panjang dan sirip besar seperti dayung. Pemburu ikan yang sangat lincah.</p>
+                <div class="stat-box">
+                    <span>Panjang: 3-5m</span> | <span>Masa: 200 JTL</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sea-monster-card">
+            <div class="badge-tag">Si Pelari Cepat</div>
+            <img src="icthty.jpg" loading="lazy" alt="Ichthyosaurus">
+            <div class="card-content">
+                <h3>Ichthyosaurus</h3>
+                <p>Memiliki bentuk tubuh menyerupai lumba-lumba modern (Evolusi Konvergen). Bisa berenang sangat cepat di lautan terbuka.</p>
+                <div class="stat-box">
+                    <span>Panjang: 2-3m</span> | <span>Masa: 250-90 JTL</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sea-monster-card">
+            <div class="badge-tag">Reptil Pesisir</div>
+            <img src="notho.jpg" loading="lazy" alt="Nothosaurus">
+            <div class="card-content">
+                <h3>Nothosaurus</h3>
+                <p>Hidup seperti anjing laut modern; berburu di air tapi beristirahat di darat. Memiliki gigi tajam seperti jarum untuk menangkap ikan.</p>
+                <div class="stat-box">
+                    <span>Panjang: 4m</span> | <span>Masa: 240-210 JTL</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sea-monster-card" style="border: 1px solid #ffcc00;">
+            <div class="badge-tag" style="background: #ffcc00;">Paus Primitif</div>
+            <img src="Basilosaurus.jpg" loading="lazy" alt="Basilosaurus">
+            <div class="card-content">
+                <h3>Basilosaurus</h3>
+                <p>Meskipun namanya berarti "Raja Kadal", ia sebenarnya adalah mamalia laut awal. Tubuhnya sangat panjang dan ramping seperti ular laut.</p>
+                <div class="stat-box" style="color: #ffcc00;">
+                    <span>Panjang: 15-18m</span> | <span>Masa: 40-34 JTL</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sea-monster-card" style="border: 1px solid #ffcc00;">
+            <div class="badge-tag" style="background: #ffcc00;">Awal Mula Paus</div>
+            <img src="pakicetus.jpg" loading="lazy" alt="Pakicetus">
+            <div class="card-content">
+                <h3>Pakicetus</h3>
+                <p>Leluhur paus paling awal yang masih memiliki empat kaki untuk berjalan di darat. Hidup di tepi sungai dan mulai beradaptasi dengan air.</p>
+                <div class="stat-box" style="color: #ffcc00;">
+                    <span>Panjang: 1-2m</span> | <span>Masa: 50 JTL</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <section id="unseen-facts" style="padding: 40px; background: rgba(255, 255, 255, 0.02); border-top: 1px solid #50c878; margin-top: 50px;">
+    <h3 style="color: #50c878; font-family: 'Orbitron', sans-serif; text-align: center;">THE UNSEEN TRUTHS</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+        
+        <div style="border-left: 2px solid #50c878; padding-left: 15px;">
+            <h4 style="color: #00d4ff;">Blue Blood Legacy</h4>
+            <p style="color: #ccc; font-size: 12px;">Ammonite dan Trilobite kemungkinan memiliki darah biru berbasis tembaga untuk bertahan di suhu laut ekstrem.</p>
+        </div>
+
+        <div style="border-left: 2px solid #ff4d4d; padding-left: 15px;">
+            <h4 style="color: #ff4d4d;">Gigantothermy</h4>
+            <p style="color: #ccc; font-size: 12px;">Ukuran raksasa Megalodon berfungsi sebagai isolator panas alami, menjaga suhu tubuh tetap stabil di air dingin.</p>
+        </div>
+
+        <div style="border-left: 2px solid #ffcc00; padding-left: 15px;">
+            <h4 style="color: #ffcc00;">Engineering Spiral</h4>
+            <p style="color: #ccc; font-size: 12px;">Garis sutura rumit pada Ammonite adalah evolusi teknik untuk menahan tekanan air ribuan meter di bawah laut.</p>
+        </div>
+
+    </div>
+</section>
+
+    <section id="apex-predators-column" style="margin-top: 100px; padding: 60px 20px; background: radial-gradient(circle at center, #001a33, #000); border-radius: 40px; border: 2px solid #00d4ff; box-shadow: 0 0 50px rgba(0, 212, 255, 0.2);">
+    
+    <div style="text-align: center; margin-bottom: 60px;">
+        <h1 style="color: #00d4ff; font-family: 'Orbitron', sans-serif; text-shadow: 0 0 20px #00d4ff; letter-spacing: 3px;">APEX PREDATORS: THE DEEP BEYOND</h1>
+        <div style="width: 100px; height: 4px; background: #00d4ff; margin: 15px auto; border-radius: 2px;"></div>
+        <p style="color: #aaa; max-width: 600px; margin: auto; line-height: 1.6;">Tiga monster terbesar, terkuat, dan paling mematikan yang pernah menguasai lautan purba Bumi.</p>
+    </div>
+
+    <div id="scroll-hint" class="mobile-only-hint">
+    <span>GESER</span>
+    <div class="arrow-blink">→</div>
+</div>
+
+    <div class="apex-cards-container" style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
+
+        <div class="apex-card glassmorphism-blue">
+            <div class="card-rank">#3</div>
+            <img src="krono.jpg" loading="lazy" alt="Kronosaurus Restoration" class="card-img-external">
+            <div class="card-header">
+                <h3>Kronosaurus</h3>
+                <div class="species-label">[PLIOSAURID]</div>
+            </div>
+            <p class="card-desc">Dinamai dari raja Titan, ia memiliki kepala sepanjang 2.5m yang dipenuhi gigi sebesar pisau daging. Penguasa pesisir Australia.</p>
+            <div class="card-stats-row">
+                <div class="stat-item"><span class="stat-label">Panjang:</span> ~10m</div>
+                <div class="stat-item"><span class="stat-label">Masa Hidup:</span> 120-100 JTL (Awal Kapur)</div>
+            </div>
+        </div>
+
+        <div class="apex-card glassmorphism-blue">
+            <div class="card-rank">#2</div>
+            <img src="pliosaur.jpg" loading="lazy" alt="Pliosaurus Life Restoration" class="card-img-external">
+            <div class="card-header">
+                <h3>Pliosaurus</h3>
+                <div class="species-label">[PREDATOR X]</div>
+            </div>
+            <p class="card-desc">"Raja Kematian" dari masa Jura. Pliosaurus memiliki kekuatan gigitan 4x lipat T-Rex dan tubuh yang sangat kuat.</p>
+            <div class="card-stats-row">
+                <div class="stat-item"><span class="stat-label">Panjang:</span> ~13m</div>
+                <div class="stat-item"><span class="stat-label">Masa Hidup:</span> 155-147 JTL (Akhir Jura)</div>
+            </div>
+        </div>
+
+        <div class="apex-card glassmorphism-red">
+            <div class="card-rank rank-red">#1</div>
+            <img src="Megalodon-Illustration.jpg" loading="lazy" alt="Megalodon Jaw Illustration" class="card-img-external">
+            <div class="card-header">
+                <h3>Megalodon</h3>
+                <div class="species-label label-red">[THE CHONDRICHTHYES]</div>
+            </div>
+            <p class="card-desc">Hiu terbesar yang pernah ada, membuat hiu putih modern terlihat seperti mainan. Penguasa samudera dunia yang tak tertandingi.</p>
+            <div class="card-stats-row stats-red">
+                <div class="stat-item"><span class="stat-label">Panjang:</span> ~15-20m</div>
+                <div class="stat-item"><span class="stat-label">Masa Hidup:</span> 23-3.6 JTL (Miosen-Pliosen)</div>
+            </div>
+        </div>
+
+    </div>
+</section>
+</section>
+
+
+<div class="audio-popup" id="audioPopup" style="z-index: 999; position: fixed; bottom: 20px; right: 20px;">
+    <div class="audio-container" style="background: rgba(10, 20, 10, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(80, 200, 120, 0.3); padding: 20px; border-radius: 20px; width: 300px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        
+        <div class="vinyl-wrapper">
+            <div id="vinyl" class="vinyl-record">
+                <div class="vinyl-center"></div>
+            </div>
+        </div>
+
+        <div class="track-details" style="flex: 1; overflow: hidden;">
+            <h4 id="trackTitle" style="margin: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #50c878;">Initializing...</h4>
+            <p style="margin: 0; font-size: 10px; opacity: 0.6; letter-spacing: 1px;">SYSTEM AUDIO</p>
+            
+            <div id="progressContainer" class="progress-area" style="width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 5px; margin: 10px 0; cursor: pointer; position: relative;">
+                <div id="progressBar" style="width: 0%; height: 100%; background: #50c878; border-radius: 5px; box-shadow: 0 0 10px #50c878;"></div>
+            </div>
+            
+            <div class="time-display" style="display: flex; justify-content: space-between; font-size: 9px; font-family: monospace;">
+                <span id="currentTime">0:00</span>
+                <span id="totalDuration">0:00</span>
+            </div>
+        </div>
+
+        <div class="controls" style="display: flex; flex-direction: column; gap: 10px;">
+            <button onclick="nextTrack()" title="Next" style="background:none; border:none; color:white; cursor:pointer;"><i data-lucide="skip-forward" size="18"></i></button>
+            <button onclick="togglePlay()" id="playBtn" style="background: #50c878; border:none; border-radius: 50%; width: 32px; height: 32px; color: black; cursor:pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="play" size="18"></i></button>
+            <button onclick="prevTrack()" title="Previous" style="background:none; border:none; color:white; cursor:pointer;"><i data-lucide="skip-back" size="18"></i></button>
+        </div>
+    </div>
+</div>
+
+<audio id="mainAudio" preload="metadata"></audio>
+
+<footer style="margin-top: 30px; padding: 20px; 
+        background: rgba(10, 20, 10, 0.6); 
+        backdrop-filter: blur(15px); 
+        border-top: 2px solid rgba(0, 255, 136, 0.3); 
+        border-radius: 20px 20px 0 0; 
+        color: rgba(255, 255, 255, 0.7); 
+        display: flex; justify-content: space-between; align-items: center; 
+        font-family: 'Segoe UI', sans-serif; font-size: 12px;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.3);">
+        
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <i data-lucide="shield-check" style="color: #00ff88; width: 18px;"></i>
+            <div>
+                <span style="color: #00ff88; font-weight: bold;">EMERALD NEXUS CORE v4.2.1</span>
+                <span style="margin: 0 10px; opacity: 0.3;">|</span>
+                <span>All Dimensions Stable. © 2026 Sovereign Anwarhu.</span>
+            </div>
+        </div>
+
+        <div style="font-size: 10px; font-family: monospace; letter-spacing: 2px; opacity: 0.6;">
+            [ NW | 106.8°E -6.2°S ] Jakarta Sector
+        </div>
+
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="index.html" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 5px; transition: 0.3s;" 
+               onmouseover="this.style.color='#00ff88'" onmouseout="this.style.color='inherit'">
+               <i data-lucide="layout-grid" size="16"></i> HUB
+            </a>
+            <span style="opacity: 0.3;">|</span>
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: #00ff88;">
+                <i data-lucide="layers-3" size="16"></i> UNITY SYNC: OK
+            </div>
+            <span style="opacity: 0.3;">|</span>
+            <button onclick="logoutAdmin()" style="background: none; border: 1px solid #ff4444; color: #ff4444; border-radius: 5px; padding: 3px 10px; cursor: pointer; transition: 0.3s;"
+                onmouseover="this.style.background='rgba(255, 68, 68, 0.2)'" onmouseout="this.style.background='none'">
+                LOGOUT
+            </button>
+        </div>
+
+    </footer>
+    <footer>A example </footer>
+    </main>
+    
+    <script src="paleo.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>

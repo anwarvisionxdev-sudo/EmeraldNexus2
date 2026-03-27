@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emerald Nexus | Windows 11 Xbox Edition</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="mask-icon" href="favicon.svg" color="#00ff88">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+    <audio id="sfxExperience" src="https://www.myinstants.com/media/sounds/minecraft_xp_sound_effect.mp3"></audio>
+
+    <header class="top-header">
+    <button class="hamburger-btn" id="menuToggle" onclick="toggleSidebar()">
+        <i data-lucide="menu"></i>
+    </button>
+    
+</header>
+
+<nav id="navSidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h2>Navigator</h2>
+        <button class="close-btn" onclick="toggleSidebar()">
+            <i data-lucide="x"></i>
+        </button>
+    </div>
+    <ul class="nav-links">
+        <li><a href="index.html"><i data-lucide="home"></i> Home</a></li>
+        <li><a href="admin.html"><i data-lucide="alert-triangle"></i> Kepunahan</a></li>
+        <li><a href="paleontology.html"><i data-lucide="skull"></i> Paleontologi</a></li>
+        <li><a href="sea.html"><i data-lucide="fish"></i> Sea-creatures</a></li>
+        <li><a href="paleo-dino.html"><i data-lucide="bone"></i> Dino</a></li>
+        <li><a href="botany.html"><i data-lucide="leaf"></i> Paleo-botany</a></li>
+        <li><a href="zoo.html"><i data-lucide="paw-print"></i> ZOOLOGY</a></li>
+        <li><a href="aqua.html"><i data-lucide="waves"></i> MARINE LIFE</a></li>
+        <li><a href="astro.html"><i data-lucide="orbit"></i> ASTRONOMI</a></li>
+        <li><a href="galaxy.html"><i data-lucide="star"></i> GALAXY</a></li>
+    </ul>
+</nav>
+
+    <main>
+        <div class="search-container">
+            <input type="text" class="search-bar" id="searchInput" placeholder="Search Emerald Nexus..." onkeyup="handleSearch()">
+            <div class="suggestion-box" id="suggestBox"></div>
+        </div>
+
+        <div class="temporal-widget">
+    <div id="live-clock">00:00:00</div>
+    <div id="live-date">Loading Temporal Data...</div>
+</div>
+
+<div class="status-bar">
+    <div id="clock" class="digital-clock">00:00:00</div>
+    <div id="weather-hub" class="weather-container">
+        <span id="weather-icon">--</span>
+        <span id="temp-value">00</span>°C
+        <small id="location-name">Detecting...</small>
+    </div>
+</div>
+
+<div id="scannerLine" class="scanner-line"></div>
+
+<div id="notification-area" style="position: fixed; bottom: 220px; right: 30px; z-index: 1000; display: flex; flex-direction: column; gap: 10px;"></div>
+
+<section id="paleo-botany-section" style="margin-top: 100px; padding: 60px 20px 120px 20px; background: rgba(0, 0, 0, 0.8); border: 2px solid #2ecc71; border-radius: 40px; box-shadow: 0 0 50px rgba(46, 204, 113, 0.2);">
+    
+    <div style="text-align: center; margin-bottom: 50px;">
+        <h1 style="color: #2ecc71; font-family: 'Mojangles', sans-serif; text-shadow: 0 0 20px #2ecc71; text-transform: uppercase;">
+            PALEO BOTANY: THE ROOTS OF TIME
+        </h1>
+        <p style="color: #ccc; max-width: 700px; margin: auto; line-height: 1.6;">
+            Menjelajahi evolusi oksigen dan kehidupan melalui jejak karbon tumbuhan purba yang membentuk dunia.
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;">
+        
+        <div style="flex: 1.5; min-width: 320px;">
+            <h3 style="color: #2ecc71; border-left: 4px solid #2ecc71; padding-left: 15px; font-family: 'Mojangles', sans-serif;">
+                REVOLUSI HIJAU ZAMAN KARBON
+            </h3>
+            <p style="color: #ddd; line-height: 1.8; text-align: justify;">
+                Hutan purba bukan hanya sekadar pemandangan, melainkan mesin biologis raksasa. Pada periode Karbon, konsentrasi oksigen melonjak hingga **35%** (dibandingkan 21% saat ini) berkat dominasi pohon raksasa seperti *Lepidodendron*.
+            </p>
+            
+            <div style="background: rgba(46, 204, 113, 0.1); padding: 25px; border-radius: 20px; border: 1px solid rgba(46, 204, 113, 0.3); margin-top: 25px;">
+                <h4 style="color: #2ecc71; margin-top: 0; font-family: 'Mojangles', sans-serif;">Data Evolusi Flora:</h4>
+                <ul style="color: #ccc; font-size: 13px; line-height: 1.8; padding-left: 20px;">
+                    <li><strong>Tinggi Maksimal:</strong> Lepidodendron bisa mencapai 30-40 meter dalam waktu singkat.</li>
+                    <li><strong>Dampak Geologis:</strong> Menumpuk sisa organik yang kini menjadi cadangan batu bara terbesar dunia.</li>
+                    <li><strong>Sistem Reproduksi:</strong> Dominasi spora sebelum evolusi biji dan bunga mengambil alih.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 20px;">
+            
+            <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 20px; border: 1px solid rgba(46, 204, 113, 0.2);">
+                <img src="lepido.jpg" 
+                     alt="Reconstruction of Carboniferous Forest" 
+                     style="width: 100%; border-radius: 15px; filter: grayscale(20%) sepia(10%) hue-rotate(90deg);">
+                <p style="color: #2ecc71; font-size: 11px; margin-top: 10px; text-align: center; font-style: italic;">
+                    Ilustrasi Hutan Rawa Karbon yang rimbun.
+                </p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 20px; border: 1px solid rgba(46, 204, 113, 0.2);">
+                <img src="fossil-leaf.jpg" 
+                     alt="Ancient Fern Fossil" 
+                     style="width: 100%; border-radius: 15px;">
+                <p style="color: #2ecc71; font-size: 11px; margin-top: 10px; text-align: center; font-style: italic;">
+                    [SKELETON]: Fosil daun paku purba dengan detail sempurna.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="scroll-wrapper" style="margin-top: 40px; padding-bottom: 20px;">
+    
+    <div style="display: flex; gap: 20px; overflow-x: auto; padding: 10px; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;">
+        
+        <div style="flex: 0 0 220px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 2px solid #e1b12c; border-radius: 20px; padding: 15px; text-align: center; transition: 0.3s;">
+            <img src="dickinsonia.jpg" alt="Dickinsonia" style="width: 100%; height: 140px; border-radius: 12px; object-fit: cover; margin-bottom: 12px; border: 1px solid rgba(225, 177, 44, 0.3);">
+            <h4 style="color: #e1b12c; margin: 0 0 8px 0; font-family: 'Mojangles', sans-serif; font-size: 16px;">Dickinsonia</h4>
+            <p style="color: #ddd; font-size: 11px; line-height: 1.4;">Organisme pipih beruas dari Ediacaran. Bukti awal transisi menuju kehidupan hewan.</p>
+        </div>
+
+        <div style="flex: 0 0 220px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 2px solid #e1b12c; border-radius: 20px; padding: 15px; text-align: center; transition: 0.3s;">
+            <img src="charnia.jpg" alt="Charnia" style="width: 100%; height: 140px; border-radius: 12px; object-fit: cover; margin-bottom: 12px; border: 1px solid rgba(225, 177, 44, 0.3);">
+            <h4 style="color: #e1b12c; margin: 0 0 8px 0; font-family: 'Mojangles', sans-serif; font-size: 16px;">Charnia</h4>
+            <p style="color: #ddd; font-size: 11px; line-height: 1.4;">Makhluk laut mirip daun paku. Hidup di dasar laut dalam tanpa cahaya matahari.</p>
+        </div>
+
+        <div style="flex: 0 0 220px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 2px solid #e1b12c; border-radius: 20px; padding: 15px; text-align: center; transition: 0.3s;">
+            <img src="cooksonia.jpg" alt="Cooksonia" style="width: 100%; height: 140px; border-radius: 12px; object-fit: cover; margin-bottom: 12px; border: 1px solid rgba(225, 177, 44, 0.3);">
+            <h4 style="color: #e1b12c; margin: 0 0 8px 0; font-family: 'Mojangles', sans-serif; font-size: 16px;">Cooksonia</h4>
+            <p style="color: #ddd; font-size: 11px; line-height: 1.4;">Pionir tumbuhan darat bervaskular pertama yang memiliki struktur batang sederhana.</p>
+        </div>
+
+        <div style="flex: 0 0 220px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 2px solid #e1b12c; border-radius: 20px; padding: 15px; text-align: center; transition: 0.3s;">
+            <img src="angiospermae.jpg" alt="Archaefructus" style="width: 100%; height: 140px; border-radius: 12px; object-fit: cover; margin-bottom: 12px; border: 1px solid rgba(225, 177, 44, 0.3);">
+            <h4 style="color: #e1b12c; margin: 0 0 8px 0; font-family: 'Mojangles', sans-serif; font-size: 16px;">Archaefructus</h4>
+            <p style="color: #ddd; font-size: 11px; line-height: 1.4;">Salah satu fosil tumbuhan berbunga tertua yang pernah ditemukan di dunia.</p>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Menghilangkan scrollbar tapi fungsi scroll tetap aktif */
+    .scroll-wrapper div::-webkit-scrollbar {
+        display: none;
+    }
+</style>
+</section>
+
+<section id="archaefructus" style="margin-top: 50px; padding: 60px 30px 100px 30px; background: rgba(0, 0, 0, 0.85); border: 2px solid #2ecc71; border-radius: 40px; box-shadow: 0 0 40px rgba(46, 204, 113, 0.15);">
+
+    <div style="margin-bottom: 40px;">
+        <h2 style="color: #2ecc71; font-family: 'Mojangles', sans-serif; text-shadow: 0 0 15px #2ecc71; border-bottom: 2px solid rgba(46, 204, 113, 0.3); padding-bottom: 10px; display: inline-block;">
+            ARCHAEFRUCTUS: THE FIRST BLOOM
+        </h2>
+        <p style="color: #ddd; line-height: 1.8; margin-top: 15px; text-align: justify; border-left: 3px solid #2ecc71; padding-left: 15px;">
+            Ditemukan di Formasi Yixian, Tiongkok, <strong>Archaefructus</strong> adalah salah satu genus tumbuhan berbunga (Angiospermae) tertua yang diketahui. Ia hidup sekitar 125 juta tahun lalu di lingkungan perairan dangkal, membuktikan bahwa revolusi bunga dimulai dari tepi air.
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+        
+        <div style="flex: 1; min-width: 300px; background: rgba(46, 204, 113, 0.05); padding: 25px; border-radius: 25px; border: 1px solid rgba(46, 204, 113, 0.2);">
+            <h3 style="color: #2ecc71; font-family: 'Mojangles', sans-serif; margin-top: 0; font-size: 18px;">🌿 CYCAS (Cycadophyta)</h3>
+            <p style="color: #ccc; font-size: 13px; line-height: 1.6;">
+                Sering disebut sebagai "Pakis Haji", kelompok ini adalah penyintas dari Era Mesozoikum yang pernah menjadi makanan utama dinosaurus herbivora.
+            </p>
+            <ul style="color: #a8e6cf; font-size: 12px; line-height: 1.8; padding-left: 20px; margin-top: 15px;">
+                <li><strong>Era Kejayaan:</strong> Periode Jura (The Age of Cycads).</li>
+                <li><strong>Ketahanan:</strong> Mampu hidup di tanah miskin hara berkat simbiosis dengan sianobakteri.</li>
+                <li><strong>Ciri Khas:</strong> Memiliki runjung (cone) raksasa sebagai organ reproduksi primitif.</li>
+            </ul>
+        </div>
+
+        <div style="flex: 1; min-width: 300px; background: rgba(46, 204, 113, 0.05); padding: 25px; border-radius: 25px; border: 1px solid rgba(46, 204, 113, 0.2);">
+            <h3 style="color: #2ecc71; font-family: 'Mojangles', sans-serif; margin-top: 0; font-size: 18px;">🍂 GINKGO (Ginkgophyta)</h3>
+            <p style="color: #ccc; font-size: 13px; line-height: 1.6;">
+                Satu-satunya spesies yang tersisa dari divisinya. Ginkgo adalah contoh sempurna dari stasis evolusi yang tidak berubah selama jutaan tahun.
+            </p>
+            <ul style="color: #a8e6cf; font-size: 12px; line-height: 1.8; padding-left: 20px; margin-top: 15px;">
+                <li><strong>Usia Fosil:</strong> Kerabat dekatnya sudah ada sejak 270 juta tahun lalu (Periode Permian).</li>
+                <li><strong>Keunikan:</strong> Memiliki daun berbentuk kipas yang tidak ditemukan pada tumbuhan lain.</li>
+                <li><strong>Daya Tahan:</strong> Dikenal sangat tahan terhadap polusi, penyakit, dan bahkan radiasi nuklir.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div style="margin-top: 40px; text-align: center; border-top: 1px solid rgba(46, 204, 113, 0.1); padding-top: 20px;">
+        <span style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 5px 15px; border-radius: 50px; font-size: 10px; font-weight: bold; letter-spacing: 1px;">
+            BOTANY ARCHIVE: CATEGORY GYMNOSPERM & ANGIOSPERM | VERIFIED BY EMERALD NEXUS
+        </span>
+    </div>
+
+</section>
+
+<section id="first-plant-section" style="padding: 80px 20px 120px 20px; background: transparent; color: #ffffff; font-family: 'Segoe UI', sans-serif;">
+
+    <div style="text-align: center; margin-bottom: 60px; background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: 20px; border: 1px solid rgba(168, 230, 207, 0.08); padding: 25px; max-width: 750px; margin-left: auto; margin-right: auto; box-shadow: 0 5px 20px rgba(0,0,0,0.2);">
+        <h2 style="font-family: 'Mojangles', sans-serif; font-size: 32px; color: #a8e6cf; text-transform: uppercase; letter-spacing: 3px; margin: 0; text-shadow: 0 0 15px rgba(168, 230, 207, 0.4);">
+            🌿 Bryophyte Pioneer
+        </h2>
+        <div style="height: 2px; width: 80px; background: linear-gradient(90deg, transparent, rgba(46, 204, 113, 0.6), transparent); margin: 12px auto; border-radius: 8px;"></div>
+        <p style="color: #bbb; font-size: 13px; margin-top: 8px; font-style: italic;">Pondasi Oksigen di Era Ordovisium (470 Juta Tahun Lalu)</p>
+    </div>
+
+    <div style="max-width: 1100px; margin: 0 auto; background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 35px; border: 1px solid rgba(168, 230, 207, 0.1); padding: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.5);">
+        
+        <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: center;">
+            
+            <div style="flex: 1; min-width: 300px; max-width: 450px; background: rgba(0,0,0,0.1); padding: 12px; border-radius: 25px; border: 1px solid rgba(168, 230, 207, 0.1);">
+                <img src="lumut.jpg" alt="Reconstruction of Ancient Single-Celled Moss" style="width: 100%; height: auto; border-radius: 18px; filter: grayscale(10%) sepia(5%); transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);">
+                <p style="color: #bbb; font-size: 10px; margin-top: 8px; text-align: center; font-style: italic; letter-spacing: 1px;">
+                    Ilustrasi Mikroskopis Koloni Bryophyte Purba.
+                </p>
+            </div>
+
+            <div style="flex: 1.2; min-width: 320px; display: flex; flex-direction: column; gap: 18px;">
+                
+                <div style="background: rgba(0,0,0,0.15); padding: 22px; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                    <h3 style="color: #ffffff; font-size: 17px; margin: 0 0 8px 0; display: flex; align-items: center; gap: 8px;">
+                        <span>🌱</span> Penakluk Daratan Pertama
+                    </h3>
+                    <p style="color: #bbb; font-size: 12px; line-height: 1.6; text-align: justify; margin: 0;">
+                        Berasal dari alga hijau bersel tunggal, nenek moyang lumut (Bryophytes) bermigrasi dari air ke daratan pada periode Ordovisium. Mereka menghancurkan batu menjadi tanah.
+                    </p>
+                </div>
+
+                <div style="background: rgba(0,0,0,0.1); padding: 22px; border-radius: 18px; border: 1px dashed rgba(168, 230, 207, 0.15);">
+                    <h4 style="color: #a8e6cf; margin-top: 0; font-size: 14px; margin-bottom: 12px; letter-spacing: 1px;">
+                        🔬 Data Archive
+                    </h4>
+                    <ul style="color: #ccc; font-size: 11px; line-height: 1.8; padding-left: 12px; margin: 0; list-style-type: disc;">
+                        <li><strong style="color: #ffffff;">Klasifikasi:</strong> Non-Vaskular (Tanpa Pembuluh).</li>
+                        <li><strong style="color: #ffffff;">Adaptasi:</strong> Kutikula lilin sederhana.</li>
+                        <li><strong style="color: #ffffff;">Dampak Global:</strong> Penurunan drastis CO2 global.</li>
+                        <li><strong style="color: #ffffff;">Peran:</strong> Jalan bagi tumbuhan tingkat tinggi.</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div style="flex: 0 0 100%; height: 1px; background: rgba(168, 230, 207, 0.05); margin-top: 10px;"></div>
+
+            <div style="flex: 0 0 100%; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 15px; border: 1px solid rgba(168, 230, 207, 0.1);">
+                <p style="color: #a8e6cf; font-size: 11px; margin: 0; font-weight: bold; font-family: 'Mojangles', sans-serif;">
+                    STATUS UPDATE 8.0: BRYOPHYTE VISUAL & DATA SYNCHRONIZED.
+                </p>
+                <p style="color: #bbb; font-size: 10px; margin-top: 2px;">
+                    (Timestamp: Paleo-Eon | Source: Mega Lab Archive | Priority: Critical)
+                </p>
+            </div>
+
+        </div> </div> <div style="margin-top: 25px; text-align: right;">
+        <span style="font-family: 'Mojangles', sans-serif; font-size: 9px; color: rgba(168, 230, 207, 0.3); letter-spacing: 1px;">
+            VERIFIED BY EMERALD NEXUS 8.0
+        </span>
+    </div>
+</section>
+
+<section id="ancient-pillars" style="padding: 60px 20px 100px 20px; color: #ffffff; font-family: 'Segoe UI', sans-serif;">
+
+    <div style="background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 35px; border: 1px solid rgba(168, 230, 207, 0.1); padding: 35px; display: flex; gap: 30px; align-items: center; flex-wrap: wrap; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+        
+        <div style="flex: 1; min-width: 280px; max-width: 380px; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 25px; border: 1px solid rgba(168, 230, 207, 0.1);">
+            <img src="prototaxites-illustration.jpg" alt="Illustration of Prototaxites Tower" style="width: 100%; height: auto; border-radius: 20px; filter: grayscale(10%) sepia(5%); transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);">
+        </div>
+
+        <div style="flex: 1.5; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
+            <div style="background: rgba(0,0,0,0.15); padding: 25px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <h3 style="font-family: 'Mojangles', sans-serif; color: #a8e6cf; margin: 0 0 10px 0;">🍄 PROTOTAXITES</h3>
+                <p style="color: #bbb; font-size: 13px; line-height: 1.6; text-align: justify; margin: 0;">
+                    Sebelum pohon raksasa merajai langit, daratan dikuasai oleh jamur menara ini. Berdiri tegak hingga 8 meter di dunia yang masih didominasi tumbuhan non-vaskular gersang.
+                </p>
+            </div>
+            <div style="background: rgba(46, 204, 113, 0.08); padding: 20px; border-radius: 18px; border: 1px dashed rgba(46, 204, 113, 0.2); box-shadow: inset 0 0 10px rgba(46, 204, 113, 0.05);">
+                <span style="font-size: 10px; color: #2ecc71; font-family: 'Mojangles', sans-serif; letter-spacing: 1px;">ERA: DEVONIAN (420 MYA)</span><br>
+                <span style="font-size: 11px; color: #fff; text-shadow: 0 0 10px rgba(168, 230, 207, 0.3);">"Mushroom-like Spire Fungus"</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 35px; border: 1px solid rgba(168, 230, 207, 0.1); padding: 35px; display: flex; gap: 30px; align-items: center; flex-wrap: wrap; flex-direction: row-reverse; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+        
+        <div style="flex: 1; min-width: 280px; max-width: 380px; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 25px; border: 1px solid rgba(168, 230, 207, 0.1);">
+            <img src="lepido.jpg" alt="Illustration of Lepidodendron Scale Tree" style="width: 100%; height: auto; border-radius: 20px; filter: grayscale(10%) sepia(5%); transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);">
+        </div>
+
+        <div style="flex: 1.5; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
+            <div style="background: rgba(0,0,0,0.15); padding: 25px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <h3 style="font-family: 'Mojangles', sans-serif; color: #a8e6cf; margin: 0 0 10px 0;">🌲 LEPIDODENDRON</h3>
+                <p style="color: #bbb; font-size: 13px; line-height: 1.6; text-align: justify; margin: 0;">
+                    Pelindung hutan purba yang megah, kerabat lumut gada (club moss) purba yang tumbuh setinggi 50 meter. Kulit batangnya memiliki pola "sisik naga" yang unik.
+                </p>
+            </div>
+            <div style="background: rgba(46, 204, 113, 0.08); padding: 20px; border-radius: 18px; border: 1px dashed rgba(46, 204, 113, 0.2); box-shadow: inset 0 0 10px rgba(46, 204, 113, 0.05);">
+                <span style="font-size: 10px; color: #2ecc71; font-family: 'Mojangles', sans-serif; letter-spacing: 1px;">ERA: CARBONIFEROUS (350 MYA)</span><br>
+                <span style="font-size: 11px; color: #fff; text-shadow: 0 0 10px rgba(168, 230, 207, 0.3);">"Pioneer Dragon-Scaled Tree"</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 35px; border: 1px solid rgba(168, 230, 207, 0.1); padding: 35px; display: flex; gap: 30px; align-items: center; flex-wrap: wrap; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+        
+        <div style="flex: 1; min-width: 280px; max-width: 380px; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 25px; border: 1px solid rgba(168, 230, 207, 0.1);">
+            <img src="mycorrhizae.jpg" alt="Microscopic Illustration of Mycorrhizae Symbiosis" style="width: 100%; height: auto; border-radius: 20px; filter: grayscale(10%) sepia(5%); transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);">
+        </div>
+
+        <div style="flex: 1.5; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
+            <div style="background: rgba(0,0,0,0.15); padding: 25px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <h3 style="font-family: 'Mojangles', sans-serif; color: #a8e6cf; margin: 0 0 10px 0;">🤝 MYCORRHIZAE</h3>
+                <p style="color: #bbb; font-size: 13px; line-height: 1.6; text-align: justify; margin: 0;">
+                    Kunci penaklukan daratan yang sesungguhnya. Simbiosis sakral antara jamur purba dan akar tumbuhan pertama untuk berbagi air dan nutrisi di lingkungan yang miskin hara.
+                </p>
+            </div>
+            <div style="background: rgba(46, 204, 113, 0.08); padding: 20px; border-radius: 18px; border: 1px dashed rgba(46, 204, 113, 0.2); box-shadow: inset 0 0 10px rgba(46, 204, 113, 0.05);">
+                <span style="font-size: 10px; color: #2ecc71; font-family: 'Mojangles', sans-serif; letter-spacing: 1px;">ORIGIN: EARLY TERRESTRIAL</span><br>
+                <span style="font-size: 11px; color: #fff; text-shadow: 0 0 10px rgba(168, 230, 207, 0.3);">"Symbiotic Fungal Connection"</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="margin-top: 30px; text-align: right;">
+        <span style="font-family: 'Mojangles', sans-serif; font-size: 9px; color: rgba(168, 230, 207, 0.3); letter-spacing: 1px;">
+            VISUALS & DATA VERIFIED BY EMERALD NEXUS 8.0
+        </span>
+    </div>
+</section>
+
+<section id="cambrian-marine-archive" style="padding: 40px 20px 80px 20px; color: #ffffff; font-family: 'Segoe UI', sans-serif;">
+
+    <div style="text-align: center; margin-bottom: 50px; background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: 20px; border: 1px solid rgba(168, 230, 207, 0.08); padding: 25px; max-width: 750px; margin-left: auto; margin-right: auto; box-shadow: 0 5px 20px rgba(0,0,0,0.2);">
+        <h2 style="font-family: 'Mojangles', sans-serif; font-size: 32px; color: #a8e6cf; text-transform: uppercase; letter-spacing: 3px; margin: 0; text-shadow: 0 0 15px rgba(168, 230, 207, 0.4);">
+            🌊 Cambrian Marine Archive
+        </h2>
+        <div style="height: 2px; width: 80px; background: linear-gradient(90deg, transparent, rgba(46, 204, 113, 0.6), transparent); margin: 12px auto; border-radius: 8px;"></div>
+        <p style="color: #bbb; font-size: 13px; margin-top: 8px; font-style: italic; letter-spacing: 1px;">Eksplorasi Pionir Hijau di Bawah Kedalaman Burgess Shale (541 Juta Tahun Lalu)</p>
+        <p style="color: rgba(168, 230, 207, 0.5); font-size: 10px; margin-top: 10px;">> Geser ke samping untuk navigasi ></p>
+    </div>
+
+    <div style="display: flex; overflow-x: auto; gap: 20px; padding: 10px 10px 30px 10px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+        
+        <div style="flex: 0 0 300px; scroll-snap-align: center; background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(168, 230, 207, 0.15); border-radius: 25px; padding: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 15px; transition: 0.3s; cursor: pointer;">
+            <div style="background: rgba(0,0,0,0.1); padding: 5px; border-radius: 18px; border: 1px solid rgba(168, 230, 207, 0.1);">
+                <img src="margaretia-illustration.jpg" alt="Reconstruction of Margaretia Tube Algae" style="width: 100%; height: auto; border-radius: 15px; filter: grayscale(10%) sepia(5%); transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);">
+            </div>
+            <div>
+                <h5 style="font-family: 'Mojangles', sans-serif; color: #fff; margin: 0 0 8px 0; font-size: 14px;">MARGARETIA</h5>
+                <p style="color: #bbb; font-size: 11px; line-height: 1.5; margin: 0; text-align: justify;">
+                    Ganggang hijau purba berbentuk tabung berpori dari Burgess Shale, tumbuh tegak di dasar samudra.
+                </p>
+                <div style="margin-top: 15px; font-size: 9px; color: #2ecc71; font-family: 'Mojangles', sans-serif;">DATA: DEVONIAN (508 MYA)</div>
+            </div>
+        </div>
+
+        <div style="flex: 0 0 300px; scroll-snap-align: center; background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(168, 230, 207, 0.15); border-radius: 25px; padding: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 15px; transition: 0.3s; cursor: pointer;">
+            <div style="background: rgba(0,0,0,0.1); padding: 5px; border-radius: 18px; border: 1px solid rgba(168, 230, 207, 0.1);">
+                <img src="dalyia-illustration.jpg" alt="Illustration of Dalyia Complex Algae" style="width: 100%; height: auto; border-radius: 15px; filter: grayscale(10%) sepia(5%); transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);">
+            </div>
+            <div>
+                <h5 style="font-family: 'Mojangles', sans-serif; color: #fff; margin: 0 0 8px 0; font-size: 14px;">DALYIA</h5>
+                <p style="color: #bbb; font-size: 11px; line-height: 1.5; margin: 0; text-align: justify;">
+                    Menampilkan percabangan kompleks dan simetris, Dalyia adalah alga Cambrian dengan estetika "pohon" purba.
+                </p>
+                <div style="margin-top: 15px; font-size: 9px; color: #2ecc71; font-family: 'Mojangles', sans-serif;">DATA: DEVONIAN (510 MYA)</div>
+            </div>
+        </div>
+
+        <div style="flex: 0 0 300px; scroll-snap-align: center; background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(168, 230, 207, 0.15); border-radius: 25px; padding: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 15px; transition: 0.3s; cursor: pointer;">
+            <div style="background: rgba(0,0,0,0.1); padding: 5px; border-radius: 18px; border: 1px solid rgba(168, 230, 207, 0.1);">
+                <img src="marpolia-illustration.jpg" alt="Illustration of Marpolia 'Hairy' Algae" style="width: 100%; height: auto; border-radius: 15px; filter: grayscale(10%) sepia(5%); transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);">
+            </div>
+            <div>
+                <h5 style="font-family: 'Mojangles', sans-serif; color: #fff; margin: 0 0 8px 0; font-size: 14px;">MARPOLIA</h5>
+                <p style="color: #bbb; font-size: 11px; line-height: 1.5; margin: 0; text-align: justify;">
+                    Ganggang "berbulu" yang tumbuh dalam rumpun lebat, berfungsi sebagai habitat bagi trilobita kecil purba.
+                </p>
+                <div style="margin-top: 15px; font-size: 9px; color: #2ecc71; font-family: 'Mojangles', sans-serif;">DATA: DEVONIAN (505 MYA)</div>
+            </div>
+        </div>
+
+        <div style="flex: 0 0 300px; scroll-snap-align: center; background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(168, 230, 207, 0.15); border-radius: 25px; padding: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 15px; transition: 0.3s; cursor: pointer;">
+            <div style="background: rgba(0,0,0,0.1); padding: 5px; border-radius: 18px; border: 1px solid rgba(168, 230, 207, 0.1);">
+                <img src="stromatolite-illustration.jpg" alt="Microscopic Illustration of Stromatolite Colony" style="width: 100%; height: auto; border-radius: 15px; filter: grayscale(10%) sepia(5%); transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);">
+            </div>
+            <div>
+                <h5 style="font-family: 'Mojangles', sans-serif; color: #fff; margin: 0 0 8px 0; font-size: 14px;">STROMATOLIT</h5>
+                <p style="color: #bbb; font-size: 11px; line-height: 1.5; margin: 0; text-align: justify;">
+                    Struktur batu berlapis hasil koloni sianobakteri purba, sang pembuat oksigen terbesar di laut Cambrian.
+                </p>
+                <div style="margin-top: 15px; font-size: 9px; color: #2ecc71; font-family: 'Mojangles', sans-serif;">DATA: DEVONIAN (540 MYA)</div>
+            </div>
+        </div>
+
+    </div> </section>
+
+<style>
+    #cambrian-marine-archive div::-webkit-scrollbar {
+        display: none;
+    }
+</style>
+
+<section id="system-logs" style="margin-top: 50px; padding: 40px 20px;">
+    
+    <div style="background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(168, 230, 207, 0.15); border-radius: 25px; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(168, 230, 207, 0.2); padding-bottom: 15px; margin-bottom: 20px;">
+            <h3 style="font-family: 'Mojangles', sans-serif; color: #a8e6cf; margin: 0; font-size: 18px; letter-spacing: 2px;">
+                > SYSTEM_LOG_LENGKAP
+            </h3>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 10px; height: 10px; background: #2ecc71; border-radius: 50%; box-shadow: 0 0 10px #2ecc71; animation: pulse 1.5s infinite;"></div>
+                <span style="color: #2ecc71; font-size: 10px; font-family: 'Courier New', Courier, monospace; font-weight: bold;">LIVE STATUS</span>
+            </div>
+        </div>
+
+        <div style="max-height: 300px; overflow-y: auto; padding-right: 10px; font-family: 'Courier New', Courier, monospace; font-size: 12px; line-height: 1.8;">
+            
+            <div style="margin-bottom: 15px; padding-left: 10px; border-left: 2px solid #a8e6cf;">
+                <span style="color: rgba(168, 230, 207, 0.5);">[2026-03-25 20:44]</span>
+                <span style="color: #fff; font-weight: bold;"> [UPDATE]</span>
+                <p style="color: #bbb; margin: 5px 0;">Botany Archive: Berhasil menambahkan data ilustrasi Prototaxites, Lepidodendron, dan Mycorrhizae dalam mode Transparansi Penuh.</p>
+            </div>
+
+            <div style="margin-bottom: 15px; padding-left: 10px; border-left: 2px solid #e1b12c;">
+                <span style="color: rgba(168, 230, 207, 0.5);">[2026-03-25 20:30]</span>
+                <span style="color: #e1b12c; font-weight: bold;"> [CRITICAL]</span>
+                <p style="color: #bbb; margin: 5px 0;">Anomali Waktu Terdeteksi: Penyatuan energi Ohma Zi-O dan kehadiran dua entitas Blade (Kenzaki & Kendate) di tahun 10.000 SM.</p>
+            </div>
+
+            <div style="margin-bottom: 15px; padding-left: 10px; border-left: 2px solid #2ecc71;">
+                <span style="color: rgba(168, 230, 207, 0.5);">[2026-03-25 20:15]</span>
+                <span style="color: #2ecc71; font-weight: bold;"> [DEPLOY]</span>
+                <p style="color: #bbb; margin: 5px 0;">Sistem Card Scrolling Horizontal diaktifkan untuk kategori Ediacara & Early Plants.</p>
+            </div>
+
+            <div style="margin-bottom: 15px; padding-left: 10px; border-left: 2px solid rgba(255,255,255,0.2);">
+                <span style="color: rgba(168, 230, 207, 0.5);">[2026-03-25 20:00]</span>
+                <span style="color: #fff;"> [INIT]</span>
+                <p style="color: #bbb; margin: 5px 0;">Emerald Nexus v8.0 Berhasil dimanifestasikan oleh Raja Anwarhu.</p>
+            </div>
+
+        </div>
+
+        <div style="margin-top: 20px; border-top: 1px solid rgba(168, 230, 207, 0.1); padding-top: 10px; text-align: right;">
+            <span style="color: rgba(168, 230, 207, 0.3); font-size: 9px; letter-spacing: 1px;">END OF CURRENT LOGS | WAITING FOR NEXT USER COMMAND...</span>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.3; }
+        100% { opacity: 1; }
+    }
+</style>
+
+<div class="audio-popup" id="audioPopup" style="z-index: 999; position: fixed; bottom: 20px; right: 20px;">
+    <div class="audio-container" style="background: rgba(10, 20, 10, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(80, 200, 120, 0.3); padding: 20px; border-radius: 20px; width: 300px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        
+        <div class="vinyl-wrapper">
+            <div id="vinyl" class="vinyl-record">
+                <div class="vinyl-center"></div>
+            </div>
+        </div>
+
+        <div class="track-details" style="flex: 1; overflow: hidden;">
+            <h4 id="trackTitle" style="margin: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #50c878;">Initializing...</h4>
+            <p style="margin: 0; font-size: 10px; opacity: 0.6; letter-spacing: 1px;">SYSTEM AUDIO</p>
+            
+            <div id="progressContainer" class="progress-area" style="width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 5px; margin: 10px 0; cursor: pointer; position: relative;">
+                <div id="progressBar" style="width: 0%; height: 100%; background: #50c878; border-radius: 5px; box-shadow: 0 0 10px #50c878;"></div>
+            </div>
+            
+            <div class="time-display" style="display: flex; justify-content: space-between; font-size: 9px; font-family: monospace;">
+                <span id="currentTime">0:00</span>
+                <span id="totalDuration">0:00</span>
+            </div>
+        </div>
+
+        <div class="controls" style="display: flex; flex-direction: column; gap: 10px;">
+            <button onclick="nextTrack()" title="Next" style="background:none; border:none; color:white; cursor:pointer;"><i data-lucide="skip-forward" size="18"></i></button>
+            <button onclick="togglePlay()" id="playBtn" style="background: #50c878; border:none; border-radius: 50%; width: 32px; height: 32px; color: black; cursor:pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="play" size="18"></i></button>
+            <button onclick="prevTrack()" title="Previous" style="background:none; border:none; color:white; cursor:pointer;"><i data-lucide="skip-back" size="18"></i></button>
+        </div>
+    </div>
+</div>
+
+<audio id="mainAudio" preload="metadata"></audio>
+
+<footer style="margin-top: 30px; padding: 20px; 
+        background: rgba(10, 20, 10, 0.6); 
+        backdrop-filter: blur(15px); 
+        border-top: 2px solid rgba(0, 255, 136, 0.3); 
+        border-radius: 20px 20px 0 0; 
+        color: rgba(255, 255, 255, 0.7); 
+        display: flex; justify-content: space-between; align-items: center; 
+        font-family: 'Segoe UI', sans-serif; font-size: 12px;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.3);">
+        
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <i data-lucide="shield-check" style="color: #00ff88; width: 18px;"></i>
+            <div>
+                <span style="color: #00ff88; font-weight: bold;">EMERALD NEXUS CORE v4.2.1</span>
+                <span style="margin: 0 10px; opacity: 0.3;">|</span>
+                <span>All Dimensions Stable. © 2026 Sovereign Anwarhu.</span>
+            </div>
+        </div>
+
+        <div style="font-size: 10px; font-family: monospace; letter-spacing: 2px; opacity: 0.6;">
+            [ NW | 106.8°E -6.2°S ] Jakarta Sector
+        </div>
+
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="index.HTML" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 5px; transition: 0.3s;" 
+               onmouseover="this.style.color='#00ff88'" onmouseout="this.style.color='inherit'">
+               <i data-lucide="layout-grid" size="16"></i> HUB
+            </a>
+            <span style="opacity: 0.3;">|</span>
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: #00ff88;">
+                <i data-lucide="layers-3" size="16"></i> UNITY SYNC: OK
+            </div>
+            <span style="opacity: 0.3;">|</span>
+            <button onclick="logoutAdmin()" style="background: none; border: 1px solid #ff4444; color: #ff4444; border-radius: 5px; padding: 3px 10px; cursor: pointer; transition: 0.3s;"
+                onmouseover="this.style.background='rgba(255, 68, 68, 0.2)'" onmouseout="this.style.background='none'">
+                LOGOUT
+            </button>
+        </div>
+
+    </footer>
+    </main>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="paleo.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>

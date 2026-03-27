@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emerald Nexus | Windows 11 Xbox Edition</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="mask-icon" href="favicon.svg" color="#00ff88">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<style>
+/* --- RESPONSIVE SIDEBAR ENGINE --- */
+:root {
+    --sidebar-width: 260px;
+    --sidebar-collapsed: 80px;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    white-space: nowrap; /* Agar teks tidak turun ke bawah saat menyempit */
+}
+
+/* KETIKA LAYAR KECIL (MOBILE) */
+@media (max-width: 768px) {
+    .sidebar {
+        width: var(--sidebar-collapsed);
+    }
+    
+    .sidebar h2, .sidebar span, .sidebar p {
+        display: none; /* Sembunyikan teks, sisakan ikon saja */
+    }
+
+    .sidebar .nav-link {
+        justify-content: center;
+        padding: 15px 0;
+    }
+
+    .main-content {
+        margin-left: 10px; /* Berikan ruang lebih untuk konten utama */
+    }
+}
+
+/* EFEK HOVER PADA MOBILE (OPSIONAL: Biar muncul lagi kalau disentuh) */
+@media (max-width: 768px) {
+    .sidebar:hover {
+        width: var(--sidebar-width);
+    }
+    .sidebar:hover h2, .sidebar:hover span, .sidebar:hover p {
+        display: inline;
+        margin-left: 10px;
+    }
+}
+
+/* Sembunyikan Label Grup saat Sidebar mengecil di Mobile */
+@media (max-width: 768px) {
+    .nav-label {
+        display: none; /* Judul grup menghilang agar tidak berantakan */
+    }
+    
+    .nav-item {
+        justify-content: center; /* Ikon berada di tengah saat teks hilang */
+        padding: 15px 0;
+    }
+
+    .nav-item span {
+        display: none; /* Sembunyikan teks menu */
+    }
+}
+
+/* Efek saat Sidebar di-hover (Opsional) */
+.sidebar:hover .nav-label {
+    display: block;
+    font-size: 10px;
+    margin-left: 10px;
+    opacity: 0.5;
+}
+
+.sidebar:hover .nav-item span {
+    display: inline;
+    margin-left: 10px;
+}
+</style>
+
+<body>
+    <audio id="ambientEntrance" src="https://www.myinstants.com/media/sounds/portal_ambient.mp3"></audio>
+
+    <canvas id="stormCanvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: -1;"></canvas>
+
+<div id="nexusAchievement" class="achievement-notif">
+    <div class="achievement-icon">🏆</div>
+    <div class="achievement-text">
+        <span>Achievement Unlocked</span>
+        <p id="achievementTitle">Explorer of History</p>
+    </div>
+</div>
+
+<audio id="sfxExperience" src="https://www.myinstants.com/media/sounds/minecraft_xp_sound_effect.mp3"></audio>
+
+ <header class="top-header">
+    <button class="hamburger-btn" id="menuToggle" onclick="toggleSidebar()">
+        <i data-lucide="menu"></i>
+    </button>
+    
+</header>
+
+<nav id="navSidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h2>Navigator</h2>
+        <button class="close-btn" onclick="toggleSidebar()">
+            <i data-lucide="x"></i>
+        </button>
+    </div>
+    <ul class="nav-links">
+        <li><a href="index.html"><i data-lucide="home"></i> Home</a></li>
+        <li><a href="admin.html"><i data-lucide="alert-triangle"></i> Kepunahan</a></li>
+        <li><a href="paleontology.html"><i data-lucide="skull"></i> Paleontologi</a></li>
+        <li><a href="sea.html"><i data-lucide="fish"></i> Sea-creatures</a></li>
+        <li><a href="paleo-dino.html"><i data-lucide="bone"></i> Dino</a></li>
+        <li><a href="botany.html"><i data-lucide="leaf"></i> Paleo-botany</a></li>
+        <li><a href="zoo.html"><i data-lucide="paw-print"></i> ZOOLOGY</a></li>
+        <li><a href="aqua.html"><i data-lucide="waves"></i> MARINE LIFE</a></li>
+        <li><a href="astro.html"><i data-lucide="orbit"></i> ASTRONOMI</a></li>
+        <li><a href="galaxy.html"><i data-lucide="star"></i> GALAXY</a></li>
+    </ul>
+</nav>
+
+    <main>
+        <div class="search-container">
+            <input type="text" class="search-bar" id="searchInput" placeholder="Search Emerald Nexus..." onkeyup="handleSearch()">
+            <div class="suggestion-box" id="suggestBox"></div>
+        </div>
+
+        <div class="temporal-widget">
+    <div id="live-clock">00:00:00</div>
+    <div id="live-date">Loading Temporal Data...</div>
+</div>
+
+<div class="status-bar">
+    <div id="clock" class="digital-clock">00:00:00</div>
+    <div id="weather-hub" class="weather-container">
+        <span id="weather-icon">--</span>
+        <span id="temp-value">00</span>°C
+        <small id="location-name">Detecting...</small>
+    </div>
+</div>
+
+<div id="scannerLine" class="scanner-line"></div>
+
+<div id="notification-area" style="position: fixed; bottom: 220px; right: 30px; z-index: 1000; display: flex; flex-direction: column; gap: 10px;"></div>
+
+<div class="encyclopedia-wrapper" style="max-width: 1000px; margin: auto; padding: 40px 20px; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+<div id="emerald-badge-container" style="position: fixed; top: 10px; right: 10px; z-index: 2500; display: none; filter: drop-shadow(0 0 10px #50c878);">
+    <div style="background: rgba(10, 20, 10, 0.9); border: 2px solid #50c878; padding: 8px 15px; border-radius: 20px; color: #50c878; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: bold;">
+        🏆 <span id="badge-text">SCHOLAR PALEONTOLOGY</span>
+    </div>
+</div>
+
+<div id="badge-notif" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000; background: rgba(10, 20, 10, 0.95); border: 3px solid #50c878; border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 0 50px rgba(80, 200, 120, 0.7);">
+    <h1 style="color: #50c878; font-family: 'Orbitron', sans-serif; margin-bottom: 20px;">LENCANA DIBUKA!</h1>
+    
+    <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 20px; filter: drop-shadow(0 0 10px #50c878);">
+        <path d="M50 10L61.8 35.3H90L67.6 51.7L76.4 79L50 63.8L23.6 79L32.4 51.7L10 35.3H38.2L50 10Z" fill="#50c878"/>
+        <path d="M50 30C50 30 45 35 45 45C45 55 50 60 50 60C50 60 55 55 55 45C55 35 50 30 50 30Z" fill="#0a140a"/>
+        <circle cx="50" cy="50" r="45" stroke="#50c878" stroke-width="5"/>
+    </svg>
+    
+    <p style="color: #fff; font-size: 16px; margin-top: 10px;">IWAE! Anda telah mendapatkan lencana<br>'HIGH-REACHER SCHOLAR'!</p>
+    <button onclick="closeBadgeNotif()" style="margin-top: 20px; padding: 10px 30px; background: #50c878; border: none; border-radius: 20px; font-weight: bold; cursor: pointer;">AGUNG!</button>
+</div>
+
+    <header style="text-align: center; margin-bottom: 60px; border-bottom: 2px solid #50c878; padding-bottom: 20px;">
+        <h1 style="font-family: 'Orbitron', sans-serif; color: #50c878; letter-spacing: 5px; text-shadow: 0 0 15px rgba(80, 200, 120, 0.4);">
+            ARCHIVES OF PALEONTOLOGY
+        </h1>
+        <p style="font-style: italic; opacity: 0.7;">"Membaca Masa Lalu Melalui Jejak yang Tersisa"</p>
+    </header>
+
+    <div class="search-container" style="text-align: center; margin: 40px 0;">
+    <input type="text" id="paleoSearch" onkeyup="searchPaleo()" list="paleoHints" placeholder="Cari: Fosil, Mesozoikum, Lautan..." 
+           style="width: 80%; max-width: 500px; padding: 12px 20px; border-radius: 25px; border: 2px solid #50c878; background: rgba(10, 20, 10, 0.8); color: white; outline: none; font-family: 'Orbitron', sans-serif;">
+    
+<div id="searchHistory" style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        </div>
+</div>
+
+    <datalist id="paleoHints">
+        <option value="Fossil">
+        <option value="Mesozoikum">
+        <option value="Lautan">
+        <option value="T-Rex">
+        <option value="Kepunahan">
+    </datalist>
+</div>
+
+    <section id="info-section" style="display: flex; gap: 30px; align-items: center; margin-bottom: 80px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 300px;">
+            <h2 style="color: #50c878; border-left: 4px solid #50c878; padding-left: 15px;">Apa itu Paleontologi?</h2>
+            <p style="line-height: 1.8; text-align: justify;">
+                Paleontologi adalah ilmu yang mempelajari kehidupan praaksara di Bumi beserta interaksinya melalui pemeriksaan **fosil**. Berbeda dengan Arkeologi yang fokus pada sejarah manusia, Paleontologi melacak evolusi organisme dari miliaran tahun yang lalu.
+            </p>
+            <blockquote style="border-left: 2px white solid; padding-left: 15px; font-style: italic; opacity: 0.6;">
+                "Fosil bukan sekadar batu, mereka adalah data waktu yang membeku."
+            </blockquote>
+        </div>
+        <div class="illustrasi-box" style="flex: 1; min-width: 300px; border: 1px solid #50c878; padding: 10px; border-radius: 15px; background: rgba(80, 200, 120, 0.05);">
+            <img src="paleo_study.jpg" alt="Ilustrasi Paleontologi" style="width: 100%; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+            <p style="font-size: 11px; text-align: center; margin-top: 10px; opacity: 0.5;">Gbr 1.1: Ahli Paleontologi melakukan ekskavasi fosil di situs gurun.</p>
+        </div>
+    </section>
+
+    <section style="margin-bottom: 80px;">
+        <h2 style="color: #50c878; text-align: center; margin-bottom: 30px;">Garis Waktu Kehidupan</h2>
+
+[Image of geological time scale diagram]
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <div class="info-card-plain" style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 10px; border-top: 3px solid #50c878;">
+                <h3 style="color: #fff; font-size: 16px;">Era Paleozoikum</h3>
+                <p style="font-size: 13px; opacity: 0.8;">Munculnya kehidupan laut kompleks dan tumbuhan darat pertama.</p>
+            </div>
+            <div class="info-card-plain" style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 10px; border-top: 3px solid #ffcc00;">
+                <h3 style="color: #fff; font-size: 16px;">Era Mesozoikum</h3>
+                <p style="font-size: 13px; opacity: 0.8;">Zaman kejayaan Dinosaurus (Trias, Jura, Kapur).</p>
+            </div>
+            <div class="info-card-plain" style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 10px; border-top: 3px solid #00aaff;">
+                <h3 style="color: #fff; font-size: 16px;">Era Kenozoikum</h3>
+                <p style="font-size: 13px; opacity: 0.8;">Kebangkitan mamalia dan munculnya spesies manusia.</p>
+            </div>
+        </div>
+    </section>
+
+        <section style="margin-top: 60px; padding: 30px; background: rgba(80, 200, 120, 0.05); border-radius: 20px; border: 1px dashed rgba(80, 200, 120, 0.3);">
+    <h2 style="color: #50c878; font-family: 'Orbitron', sans-serif; font-size: 1.5rem;">Bagaimana Fosil Terbentuk?</h2>
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+        <div style="flex: 1; min-width: 280px;">
+            <ol style="line-height: 2; font-size: 14px; color: #ccc;">
+                <li><strong>Kematian:</strong> Organisme mati dan terkubur cepat oleh sedimen (lumpur/pasir).</li>
+                <li><strong>Perpetuasi:</strong> Bagian lunak membusuk, menyisakan bagian keras (tulang/gigi).</li>
+                <li><strong>Per mineralisasi:</strong> Mineral dari air tanah meresap ke dalam pori-tulang.</li>
+                <li><strong>Ekskavasi:</strong> Erosi atau aktivitas manusia membawa fosil ke permukaan.</li>
+            </ol>
+        </div>
+        <div style="flex: 1; min-width: 280px; text-align: center;">
+            <img src="fossil_procces.jpg" alt="Proses Fosil" style="width: 100%; border-radius: 10px; border: 2px solid #50c878;">
+        </div>
+    </div>
+</section>
+
+<div class="fact-box" style="margin-top: 40px; background: linear-gradient(135deg, rgba(80, 200, 120, 0.2), rgba(10, 20, 10, 0.8)); padding: 20px; border-left: 5px solid #50c878; border-radius: 0 15px 15px 0;">
+    <h4 style="margin: 0; color: #50c878;"><i data-lucide="lightbulb" style="vertical-align: middle;"></i> Tahukah Anda?</h4>
+    <p style="font-size: 13px; margin-top: 10px; line-height: 1.5;">
+        Burung yang kita lihat sekarang secara biologis adalah keturunan langsung dari dinosaurus Theropoda kecil. Jadi, secara teknis, "dinosaurus" tidak sepenuhnya punah!
+    </p>
+</div>
+
+<div id="glossarySidebar" class="glossary-side" style="position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: rgba(10, 20, 10, 0.9); backdrop-filter: blur(15px); border-left: 1px solid #50c878; z-index: 1000; transition: 0.5s; padding: 30px; overflow-y: auto;">
+    <button onclick="toggleGlossary()" style="background:none; border:none; color:#50c878; cursor:pointer; font-size: 20px; position: absolute; top: 20px; right: 20px;">&times;</button>
+    
+    <h3 style="color: #50c878; font-family: 'Orbitron', sans-serif; margin-bottom: 25px;">Glosarium</h3>
+    
+    <div class="glossary-item" style="margin-bottom: 20px;">
+        <h4 style="color: #fff; margin: 0; font-size: 14px;">Ekskavasi</h4>
+        <p style="font-size: 12px; opacity: 0.7; margin: 5px 0;">Proses penggalian fosil dari lapisan tanah atau batuan sedimen.</p>
+    </div>
+
+    <div class="glossary-item" style="margin-bottom: 20px;">
+        <h4 style="color: #fff; margin: 0; font-size: 14px;">Mesozoikum</h4>
+        <p style="font-size: 12px; opacity: 0.7; margin: 5px 0;">Era geologi antara 252 hingga 66 juta tahun lalu, dikenal sebagai 'Zaman Reptil'.</p>
+    </div>
+
+    <div class="glossary-item" style="margin-bottom: 20px;">
+        <h4 style="color: #fff; margin: 0; font-size: 14px;">Koprolit</h4>
+        <p style="font-size: 12px; opacity: 0.7; margin: 5px 0;">Fosil kotoran dinosaurus yang membantu ilmuwan memahami pola makan mereka.</p>
+    </div>
+</div>
+
+<button onclick="toggleGlossary()" style="position: fixed; bottom: 100px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: #50c878; border: none; color: #0a140a; cursor: pointer; z-index: 998; box-shadow: 0 0 15px rgba(80, 200, 120, 0.5); display: flex; align-items: center; justify-content: center;">
+    <i data-lucide="book-open"></i>
+</button>
+
+<div class="marine-section" style="margin-top: 50px; padding: 20px;">
+    <h3 style="color: #50c878; font-family: 'Orbitron', sans-serif; margin-bottom: 25px; border-bottom: 1px solid rgba(80, 200, 120, 0.3); display: inline-block;">Peninggalan Samudera Purba</h3>
+    
+    <div class="mini-card-grid" style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: thin; scrollbar-color: #50c878 transparent;">
+        
+        <div class="mini-card" onclick="openTimeline('Ammonite', 'Mesozoikum (Devon - Kapur)', '240 - 66 Juta Tahun Lalu', '80%')">
+            <div class="mini-img-wrapper">
+                <img src="ammonite.jpg" alt="Ammonite" onerror="this.src='assets/img/logo_emerald.png';">
+            </div>
+            <h4 class="mini-title">Ammonite</h4>
+            <p class="mini-text">Moluska spiral. Kerabat hidup: <strong>Nautilus</strong>.</p>
+        </div>
+
+        <div class="mini-card" onclick="openTimeline('Plesiosaurus', 'Mesozoikum (Jura - Kapur)', '203 - 66 Juta Tahun Lalu', '85%')">
+            <div class="mini-img-wrapper">
+                <img src="plesio.jpg" alt="Plesiosaurus" onerror="this.src='assets/img/logo_emerald.png';">
+            </div>
+            <h4 class="mini-title">Plesiosaurus</h4>
+            <p class="mini-text">Leher panjang. Legenda: <strong>Loch Ness</strong>.</p>
+        </div>
+
+        <div class="mini-card" onclick="openTimeline('Anomalocaris', 'Paleozoikum (Kambrium)', '508 Juta Tahun Lalu', '15%')">
+            <div class="mini-img-wrapper">
+                <img src="anomalo.jpg" alt="Anomalocaris" onerror="this.src='assets/img/logo_emerald.png';">
+            </div>
+            <h4 class="mini-title">Anomalocaris</h4>
+            <p class="mini-text">Predator aneh dengan lengan penjepit raksasa.</p>
+        </div>
+
+        <div class="mini-card" onclick="openTimeline('Trilobite', 'Paleozoikum (Kambrium - Permian)', '521 - 252 Juta Tahun Lalu', '25%')">
+            <div class="mini-img-wrapper">
+                <img src="trilobite.jpg" alt="Trilobite" onerror="this.src='assets/img/logo_emerald.png';">
+            </div>
+            <h4 class="mini-title">Trilobite</h4>
+            <p class="mini-text">Artropoda lapis baja, merajai dasar laut purba.</p>
+        </div>
+
+    </div>
+</div>
+
+<div id="timelineOverlay" class="timeline-overlay">
+    <div class="timeline-box">
+        <h2 id="ovName"></h2>
+        <div class="divider"></div>
+        <p class="label">PERIODE GEOLOGI</p>
+        <h3 id="ovEra"></h3>
+        
+        <div class="timeline-bar-bg">
+            <div id="ovProgress" class="timeline-progress"></div>
+            <div class="timeline-markers">
+                <span>Paleo</span>
+                <span>Meso</span>
+                <span>Keno</span>
+            </div>
+        </div>
+        
+        <p id="ovYears" class="year-text"></p>
+        <button onclick="closeTimeline()" class="close-btn">TUTUP DATA</button>
+    </div>
+</div>
+
+    </div>
+</div>
+
+<section id="section-archaeopteryx" style="margin-top: 80px; padding: 40px; background: linear-gradient(135deg, #0a1a0a, #1a2a1a); border: 2px solid #50c878; border-radius: 30px; box-shadow: 0 0 40px rgba(80, 200, 120, 0.2);">
+    
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h2 style="color: #50c878; font-family: 'Orbitron', sans-serif; letter-spacing: 2px;">ARCHAEOPTERYX: SANG PENDAHULU</h2>
+        <div style="width: 60px; height: 3px; background: #50c878; margin: 10px auto;"></div>
+    </div>
+
+    <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: center;">
+        <div style="flex: 1; min-width: 300px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(80, 200, 120, 0.5);">
+            <img src="archaeopteryx.jpg" 
+                 alt="Archaeopteryx Fossil" 
+                 style="width: 100%; display: block; filter: contrast(1.1) brightness(1.1);">
+            <p style="font-size: 10px; padding: 10px; background: #000; color: #50c878; margin: 0; text-align: center;">
+                Fosil "Specimen Berlin" - Bukti nyata transisi reptil ke burung.
+            </p>
+        </div>
+
+        <div style="flex: 1.5; min-width: 300px;">
+            <h3 style="color: #fff; border-left: 4px solid #50c878; padding-left: 15px;">Mosaik Kehidupan</h3>
+            <p style="color: #ddd; line-height: 1.8; text-align: justify;">
+                Hidup sekitar <strong>150 Juta Tahun Lalu</strong> (Periode Jura), Archaeopteryx adalah fosil transisi paling terkenal. Ia ditemukan pertama kali di tambang batu kapur Solnhofen, Jerman, yang mampu mengawetkan detail bulu dengan sangat sempurna.
+            </p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                <div style="background: rgba(80, 200, 120, 0.1); padding: 15px; border-radius: 10px;">
+                    <strong style="color: #50c878;">Ciri Dinosaurus:</strong>
+                    <ul style="font-size: 12px; color: #ccc; padding-left: 15px; margin-top: 5px;">
+                        <li>Memiliki gigi tajam.</li>
+                        <li>Ekor bertulang panjang.</li>
+                        <li>Cakar di ujung sayap.</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(80, 200, 120, 0.1); padding: 15px; border-radius: 10px;">
+                    <strong style="color: #50c878;">Ciri Burung:</strong>
+                    <ul style="font-size: 12px; color: #ccc; padding-left: 15px; margin-top: 5px;">
+                        <li>Bulu sayap asimetris.</li>
+                        <li>Struktur sayap terbang.</li>
+                        <li>Postur tubuh ramping.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="section-ediacaran" style="margin-top: 80px; padding: 40px; background: radial-gradient(circle, #051010, #000); border: 2px solid #00ffcc; border-radius: 30px;">
+    
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h2 style="color: #00ffcc; font-family: 'Orbitron', sans-serif;">BIOTA EDIAKARA: JEJAK PERTAMA</h2>
+        <p style="color: #888; font-size: 14px;">Menjelajahi makhluk multiseluler pertama di Bumi.</p>
+    </div>
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;">
+        
+        <div style="flex: 1; min-width: 300px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid rgba(0, 255, 204, 0.3);">
+            <img src="dickinsonia.jpg" alt="Dickinsonia" style="width: 100%; border-radius: 15px; margin-bottom: 15px;">
+            <h3 style="color: #00ffcc;">Dickinsonia</h3>
+            <p style="color: #ccc; font-size: 13px; line-height: 1.6;">
+                Sering dianggap sebagai salah satu hewan pertama yang pernah hidup. Berbentuk pipih seperti handuk atau daun dengan ruas-ruas simetris.
+            </p>
+            <ul style="color: #00ffcc; font-size: 12px; padding-left: 20px;">
+                <li>Ukuran: Beberapa mm hingga 1,4 meter.</li>
+                <li>Gaya Hidup: Menghisap nutrisi dari mikroba di dasar laut.</li>
+                <li>Fakta: Mengandung kolesterol (bukti kuat bahwa ia adalah hewan).</li>
+            </ul>
+        </div>
+
+        <div style="flex: 1; min-width: 300px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid rgba(0, 255, 204, 0.3);">
+            <img src="spriggina.jpg" alt="Spriggina" style="width: 100%; border-radius: 15px; margin-bottom: 15px;">
+            <h3 style="color: #00ffcc;">Spriggina</h3>
+            <p style="color: #ccc; font-size: 13px; line-height: 1.6;">
+                Kemungkinan besar adalah nenek moyang arthropoda (seperti Trilobite). Memiliki bagian "kepala" yang melengkung dan tubuh beruas.
+            </p>
+            <ul style="color: #00ffcc; font-size: 12px; padding-left: 20px;">
+                <li>Ukuran: Sekitar 3 - 5 cm.</li>
+                <li>Gaya Hidup: Kemungkinan bergerak aktif di dasar laut (predator awal?).</li>
+                <li>Fakta: Menunjukkan awal mula simetri bilateral (kiri-kanan).</li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+<section id="marine-section" style="margin-top: 80px; padding: 40px; background: radial-gradient(circle at center, #001a1a, #000); border-radius: 30px;">
+    
+    <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: center; margin-bottom: 60px;">
+        <div style="flex: 1; min-width: 300px;">
+            <h2 style="color: #00d4ff; font-family: 'Orbitron', sans-serif; font-size: 28px;">Ammonite: Insinyur Samudra</h2>
+            <p style="color: #fff; line-height: 1.8; text-align: justify;">
+                Ammonite adalah sefalopoda yang hidup selama <strong>330 juta tahun</strong>. Mereka adalah kerabat purba dari cumi-cumi dan Nautilus. Cangkangnya yang ikonik berfungsi sebagai perlindungan sekaligus alat navigasi di kedalaman air.
+            </p>
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-left: 4px solid #00d4ff; border-radius: 5px;">
+                <span style="color: #00d4ff; font-weight: bold;">Fakta Cepat:</span>
+                <ul style="color: #ddd; font-size: 13px; margin-top: 5px;">
+                    <li>Masa Hidup: 400 JTL - 66 JTL</li>
+                    <li>Habitat: Laut Dangkal hingga Dalam</li>
+                    <li>Makanan: Plankton, Krustasea, dan Ikan Kecil</li>
+                </ul>
+            </div>
+        </div>
+        <div style="flex: 1; min-width: 300px; border-radius: 20px; overflow: hidden; border: 2px solid #00d4ff; box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);">
+            <img src="ammo.jpg"
+                 alt="Ammonite Fossil" style="width: 100%; display: block;">
+        </div>
+    </div>
+
+    <h3 style="color: #00d4ff; font-family: 'Orbitron', sans-serif; text-align: center; margin-bottom: 30px;">KERABAT DEKAT (PALEONTOLOGY LIST)</h3>
+    <div class="glass-container" style="display: flex; gap: 20px; overflow-x: auto; padding: 20px; scroll-behavior: smooth;">
+        
+        <div class="glass-card">
+            <img src="Cemeroceras.jpg" alt="Cameroceras">
+            <h4>Cameroceras</h4>
+            <p>Raksasa leher lurus yang bisa mencapai panjang 6-9 meter. Predator puncak era Ordovisium.</p>
+        </div>
+
+        <div class="glass-card">
+            <img src="ortho.jpg" alt="Orthoceras">
+            <h4>Orthoceras</h4>
+            <p>Memiliki cangkang lurus runcing. Sangat umum ditemukan sebagai fosil di Maroko.</p>
+        </div>
+
+        <div class="glass-card">
+            <img src="plectron.jpg" alt="Plectronoceras">
+            <h4>Plectronoceras</h4>
+            <p>Salah satu sefalopoda tertua yang diketahui (Kambrium). Berukuran sangat kecil dan primitif.</p>
+        </div>
+
+    </div>
+</section>
+
+<section id="brachio-map-section" style="margin-top: 80px; padding: 40px; background: rgba(10, 20, 10, 0.9); border: 1px solid #50c878; border-radius: 20px;">
+    
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #50c878; font-family: 'Orbitron', sans-serif;">PETA PENEMUAN BRACHIOSAURUS</h2>
+        <p style="font-size: 14px; opacity: 0.7;">Geser slider untuk melihat urutan penemuan fosil secara historis.</p>
+    </div>
+
+    <div id="map-container" style="position: relative; width: 100%; max-width: 800px; margin: auto; background: rgba(80, 200, 120, 0.05); border-radius: 15px; border: 1px solid rgba(80, 200, 120, 0.2); overflow: hidden;">
+        <img src="World-Map-scaled.jpg" style="width: 100%; opacity: 0.3; filter: invert(1);" alt="World Map">
+        
+        <div id="discovery-pins"></div>
+    </div>
+
+    <div id="photoModal" onclick="this.style.display='none'" style="display:none; position:fixed; z-index:3000; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); backdrop-filter:blur(5px); cursor:zoom-out;">
+    <div style="position:relative; width:90%; max-width:1000px; margin:auto; top:50%; transform:translateY(-50%);">
+        <img id="modalImg" style="display:block; max-width:100%; max-height:90vh; border: 3px solid #50c878; border-radius:15px;">
+        
+        <div style="position:absolute; bottom:20px; right:20px; background:rgba(10,20,10,0.8); border:1px solid #50c878; padding:10px; border-radius:10px; text-align:center;">
+            <p style="color:#50c878; font-size:10px; margin-bottom:5px;">SKALA MANUSIA (1.7m)</p>
+            <div style="width:10px; height:100px; background:#fff; margin:auto; position:relative; overflow:hidden; border-radius:5px;">
+                <div style="width:100%; height:1.7%; background:#50c878; position:absolute; bottom:0;"></div> </div>
+            <p style="color:#fff; font-size:12px; margin-top:5px; font-weight:bold;">~13-16m</p> </div>
+    </div>
+</div>
+
+    <div style="margin-top: 40px; text-align: center;">
+        <h3 id="display-year" style="color: #50c878; font-family: 'Orbitron', sans-serif; font-size: 24px; margin-bottom: 10px;">Tahun: 1890</h3>
+        <input type="range" id="timeSlider" min="1890" max="1920" value="1890" step="1" 
+               style="width: 80%; cursor: pointer; accent-color: #50c878;" oninput="updateMap(this.value)">
+        <div style="display: flex; justify-content: space-between; width: 80%; margin: auto; font-size: 12px; opacity: 0.5;">
+            <span>1890</span>
+            <span>1900 (Riggs Hill)</span>
+            <span>1910 (Tendaguru)</span>
+            <span>1920</span>
+        </div>
+    </div>
+
+    <div id="discovery-info" style="margin-top: 30px; min-height: 80px; text-align: center; padding: 15px; border-top: 1px dashed rgba(80, 200, 120, 0.3);">
+        <p style="font-style: italic; opacity: 0.5;">Belum ada penemuan besar tercatat...</p>
+    </div>
+
+    <div id="museum-gallery" style="margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; opacity: 0; transition: 1s ease;">
+    </div>
+
+<div id="photoModal" onclick="this.style.display='none'" style="display:none; position:fixed; z-index:3000; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); backdrop-filter:blur(5px); cursor:zoom-out;">
+    <img id="modalImg" style="margin:auto; display:block; max-width:90%; max-height:90%; border: 3px solid #50c878; border-radius:15px; position:relative; top:50%; transform:translateY(-50%);">
+</div>
+</section>
+
+<section id="section-kepunahan" style="margin-top: 80px; padding: 40px; background: linear-gradient(180deg, rgba(20, 10, 10, 0.9), rgba(50, 0, 0, 0.3)); border: 2px solid #ff4d4d; border-radius: 20px; box-shadow: 0 0 30px rgba(255, 77, 77, 0.2);">
+    
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #ff4d4d; font-family: 'Orbitron', sans-serif; letter-spacing: 3px; text-shadow: 0 0 15px #ff4d4d;">
+            66 JTL: TITIK BALIK BUMI
+        </h2>
+        <div style="width: 50px; height: 3px; background: #ff4d4d; margin: 10px auto;"></div>
+    </div>
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap; align-items: center;">
+        <div style="flex: 1; min-width: 300px; border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2);">
+            <img src="kepunahan.jpg"
+                 alt="Asteroid Impact" 
+                 style="width: 100%; display: block; filter: sepia(0.3) contrast(1.2);">
+            <p style="font-size: 10px; padding: 10px; background: #000; margin: 0; opacity: 0.6; text-align: center;">
+                Ilustrasi: Tabrakan Asteroid Chicxulub di Semenanjung Yucatán.
+            </p>
+        </div>
+
+        <div style="flex: 1.2; min-width: 300px;">
+            <h3 style="color: #fff; border-left: 3px solid #ff4d4d; padding-left: 15px; font-size: 18px;">Asteroid Chicxulub</h3>
+            <p style="font-size: 14px; line-height: 1.8; color: #ddd; text-align: justify;">
+                Sekitar <strong>66 Juta Tahun Lalu (JTL)</strong>, sebuah asteroid berdiameter 10-15 km menghantam Bumi dengan kekuatan miliaran bom atom. Tabrakan ini menciptakan kawah raksasa selebar 150 km di Meksiko.
+            </p>
+            
+            <ul style="color: #ff4d4d; font-size: 13px; list-style-type: '⚡ '; line-height: 2;">
+                <li><strong>Mega-Tsunami:</strong> Gelombang setinggi ratusan meter menyapu pesisir dunia.</li>
+                <li><strong>Musim Dingin Nuklir:</strong> Debu menutupi matahari selama bertahun-tahun.</li>
+                <li><strong>Kepunahan 75%:</strong> Mengakhiri era Dinosaurus dan membuka jalan bagi mamalia.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<div id="quiz-section" style="margin-top: 50px; padding: 30px; background: rgba(10, 20, 10, 0.9); border: 2px dashed #50c878; border-radius: 20px; text-align: center;">
+    <h3 style="color: #50c878; font-family: 'Orbitron', sans-serif;">UJI PENGETAHUAN EMERALD</h3>
+    <p id="quiz-question" style="color: #fff; margin-bottom: 20px;">Berapakah tinggi kerangka Brachiosaurus yang dipajang di Museum Berlin?</p>
+    
+    <div id="quiz-options" style="display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: auto;">
+        <button onclick="checkAnswer(this, false)" class="quiz-btn">10.5 Meter</button>
+        <button onclick="checkAnswer(this, true)" class="quiz-btn">13.2 Meter</button>
+        <button onclick="checkAnswer(this, false)" class="quiz-btn">18.0 Meter</button>
+    </div>
+
+    <div id="quiz-result" style="margin-top: 20px; font-weight: bold; min-height: 24px;"></div>
+</div>
+
+<div id="sea-quiz-section" style="margin-top: 30px; padding: 30px; background: rgba(10, 20, 30, 0.9); border: 2px dashed #00d4ff; border-radius: 20px; text-align: center;">
+    <h3 style="color: #00d4ff; font-family: 'Orbitron', sans-serif;">TRIAL: SEA EXPLORER</h3>
+    <p style="color: #fff; margin-bottom: 20px;">Ammonite adalah kerabat purba dari makhluk laut modern yang mana?</p>
+    
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: auto;">
+        <button onclick="checkSeaAnswer(this, false)" class="sea-btn">Kepiting (Crab)</button>
+        <button onclick="checkSeaAnswer(this, true)" class="sea-btn">Cumi-cumi & Gurita</button>
+        <button onclick="checkSeaAnswer(this, false)" class="sea-btn">Ikan Hiu Purba</button>
+    </div>
+
+    <div id="sea-quiz-result" style="margin-top: 20px; font-weight: bold; min-height: 24px;"></div>
+</div>
+
+<div id="achievement-panel" style="margin-top: 50px; padding: 30px; background: rgba(10, 20, 10, 0.95); border: 1px solid #50c878; border-radius: 20px;">
+    <h3 style="color: #50c878; font-family: 'Orbitron', sans-serif; text-align: center; margin-bottom: 30px;">HALL OF ACHIEVEMENTS</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 20px; justify-items: center;">
+        
+        <div id="slot-brachio" class="achievement-slot locked">
+            <div class="badge-icon">
+                <svg width="50" height="50" viewBox="0 0 100 100"><path d="M50 10L61.8 35.3H90L67.6 51.7L76.4 79L50 63.8L23.6 79L32.4 51.7L10 35.3H38.2L50 10Z" fill="currentColor"/></svg>
+            </div>
+            <p class="badge-label">HIGH-REACHER</p>
+        </div>
+
+        <div id="slot-ammonite" class="achievement-slot locked">
+            <div class="badge-icon">
+                <svg width="50" height="50" viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" stroke="currentColor" stroke-width="5" fill="none"/><path d="M50 20C33 20 20 33 20 50H30" stroke="currentColor" stroke-width="5"/></svg>
+            </div>
+            <p class="badge-label">SEA EXPLORER</p>
+        </div>
+
+        <div id="slot-impact" class="achievement-slot locked">
+            <div class="badge-icon">
+                <svg width="50" height="50" viewBox="0 0 100 100"><path d="M20 20L80 80M80 20L20 80" stroke="currentColor" stroke-width="8"/></svg>
+            </div>
+            <p class="badge-label">THE SURVIVOR</p>
+        </div>
+
+    </div>
+</div>
+
+<section id="dev-log-section" style="margin-top: 80px; padding: 40px; background: #050a05; border: 1px solid #50c878; border-radius: 20px; font-family: 'Courier New', Courier, monospace;">
+    
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid rgba(80, 200, 120, 0.3); padding-bottom: 10px;">
+        <div style="width: 12px; height: 12px; background: #ff4d4d; border-radius: 50%;"></div>
+        <div style="width: 12px; height: 12px; background: #ffcc00; border-radius: 50%;"></div>
+        <div style="width: 12px; height: 12px; background: #50c878; border-radius: 50%;"></div>
+        <h4 style="color: #50c878; margin: 0; margin-left: 10px; font-size: 14px;">PALEONTOLOGY_SYSTEM_LOG.exe</h4>
+    </div>
+
+    <div id="log-content" style="height: 300px; overflow-y: auto; color: #50c878; font-size: 13px; line-height: 1.6; padding-right: 10px;">
+        <p>[08:00:21] > Booting Emerald Library v3.0...</p>
+        <p>[09:12:45] > <span style="color: #fff;">[FEATURE_ADDED]</span> : Section 'Terx' (Dinosaurs) deployed successfully.</p>
+        <p>[10:05:12] > <span style="color: #fff;">[UI_UPGRADE]</span> : Glassmorphism Cards for Marine Life integrated.</p>
+        <p>[11:30:00] > <span style="color: #fff;">[MAP_SYNC]</span> : Brachiosaurus Discovery Map (Riggs Hill & Tendaguru) is active.</p>
+        <p>[12:45:10] > <span style="color: #fff;">[LOGIC_INIT]</span> : Search Bar with Auto-Jump & Suggestion logic enabled.</p>
+        <p>[13:20:55] > <span style="color: #fff;">[EVENT_LOG]</span> : Chicxulub Asteroid Impact 66 JTL simulation added.</p>
+        <p>[14:40:00] > <span style="color: #fff;">[GAMIFICATION]</span> : Trial of the Emerald Scholars (Quiz System) is live.</p>
+        <p>[15:15:30] > <span style="color: #fff;">[BADGE_SYSTEM]</span> : 'High-Reacher' & 'Sea Explorer' Achievement Unlocked.</p>
+        <p>[16:00:00] > <span style="color: #fff;">[SCALE_SYNC]</span> : Human vs Brachiosaurus 1:1 Comparison deployed.</p>
+        <p>[SYSTEM] > <span style="color: #00d4ff;">Status: Pustaka Emerald Paleontology OPTIMIZED.</span></p>
+        <p class="typing-cursor">_</p>
+    </div>
+</section>
+    </section>
+
+</div>
+
+<div class="audio-popup" id="audioPopup" style="z-index: 999; position: fixed; bottom: 20px; right: 20px;">
+    <div class="audio-container" style="background: rgba(10, 20, 10, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(80, 200, 120, 0.3); padding: 20px; border-radius: 20px; width: 300px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        
+        <div class="vinyl-wrapper">
+            <div id="vinyl" class="vinyl-record">
+                <div class="vinyl-center"></div>
+            </div>
+        </div>
+
+        <div class="track-details" style="flex: 1; overflow: hidden;">
+            <h4 id="trackTitle" style="margin: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #50c878;">Initializing...</h4>
+            <p style="margin: 0; font-size: 10px; opacity: 0.6; letter-spacing: 1px;">SYSTEM AUDIO</p>
+            
+            <div id="progressContainer" class="progress-area" style="width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 5px; margin: 10px 0; cursor: pointer; position: relative;">
+                <div id="progressBar" style="width: 0%; height: 100%; background: #50c878; border-radius: 5px; box-shadow: 0 0 10px #50c878;"></div>
+            </div>
+            
+            <div class="time-display" style="display: flex; justify-content: space-between; font-size: 9px; font-family: monospace;">
+                <span id="currentTime">0:00</span>
+                <span id="totalDuration">0:00</span>
+            </div>
+        </div>
+
+        <div class="controls" style="display: flex; flex-direction: column; gap: 10px;">
+            <button onclick="nextTrack()" title="Next" style="background:none; border:none; color:white; cursor:pointer;"><i data-lucide="skip-forward" size="18"></i></button>
+            <button onclick="togglePlay()" id="playBtn" style="background: #50c878; border:none; border-radius: 50%; width: 32px; height: 32px; color: black; cursor:pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="play" size="18"></i></button>
+            <button onclick="prevTrack()" title="Previous" style="background:none; border:none; color:white; cursor:pointer;"><i data-lucide="skip-back" size="18"></i></button>
+        </div>
+    </div>
+</div>
+
+<audio id="mainAudio" preload="metadata"></audio>
+
+<footer style="margin-top: 30px; padding: 20px; 
+        background: rgba(10, 20, 10, 0.6); 
+        backdrop-filter: blur(15px); 
+        border-top: 2px solid rgba(0, 255, 136, 0.3); 
+        border-radius: 20px 20px 0 0; 
+        color: rgba(255, 255, 255, 0.7); 
+        display: flex; justify-content: space-between; align-items: center; 
+        font-family: 'Segoe UI', sans-serif; font-size: 12px;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.3);">
+        
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <i data-lucide="shield-check" style="color: #00ff88; width: 18px;"></i>
+            <div>
+                <span style="color: #00ff88; font-weight: bold;">EMERALD NEXUS CORE v4.2.1</span>
+                <span style="margin: 0 10px; opacity: 0.3;">|</span>
+                <span>All Dimensions Stable. © 2026 Sovereign Anwarhu.</span>
+            </div>
+        </div>
+
+        <div style="font-size: 10px; font-family: monospace; letter-spacing: 2px; opacity: 0.6;">
+            [ NW | 106.8°E -6.2°S ] Jakarta Sector
+        </div>
+
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="index.html" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 5px; transition: 0.3s;" 
+               onmouseover="this.style.color='#00ff88'" onmouseout="this.style.color='inherit'">
+               <i data-lucide="layout-grid" size="16"></i> HUB
+            </a>
+            <span style="opacity: 0.3;">|</span>
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: #00ff88;">
+                <i data-lucide="layers-3" size="16"></i> UNITY SYNC: OK
+            </div>
+            <span style="opacity: 0.3;">|</span>
+            <button onclick="logoutAdmin()" style="background: none; border: 1px solid #ff4444; color: #ff4444; border-radius: 5px; padding: 3px 10px; cursor: pointer; transition: 0.3s;"
+                onmouseover="this.style.background='rgba(255, 68, 68, 0.2)'" onmouseout="this.style.background='none'">
+                LOGOUT
+            </button>
+        </div>
+
+    </footer>
+    <footer>A example </footer>
+    </main>
+
+    <script>
+        // Tambahkan ini di script khusus paleo.html
+function addDustParticles() {
+    // Logika mirip rain.js tapi partikelnya bergerak lambat ke atas
+    // Memberikan kesan fosil yang baru digali dari debu waktu.
+}
+
+function searchPaleo() {
+    const input = document.getElementById('paleoSearch');
+    const filter = input.value.toLowerCase();
+    
+    // 🎹 DETEKSI TOMBOL ENTER
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // Mencegah reload halaman
+            
+            // LOGIKA PENGARAHAN (JUMP LOGIC)
+            if (filter.includes("fosil") || filter.includes("fossil")) {
+                scrollToSection('section-fosil');
+            } 
+            else if (filter.includes("mesozoikum") || filter.includes("dino")) {
+                scrollToSection('section-mesozoikum');
+            }
+            else if (filter.includes("ammonite") || filter.includes("laut")) {
+                scrollToSection('marine-section'); // ID dari mini-cards tadi
+            }
+            else {
+                alert("Data tidak ditemukan di Pustaka Emerald!");
+            }
+        }
+    });
+}
+
+function scrollToSection(id) {
+    const element = document.getElementById(id);
+    if (element) {
+        // 🚀 1. Pindah layar dengan halus
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // ✨ 2. EFEK HIGHLIGHT (Emerald Pulse)
+        // Kita tambahkan class CSS khusus untuk memberikan efek cahaya
+        element.classList.add('highlight-emerald');
+
+        // ⏳ 3. Hilangkan efek setelah 3 detik agar kembali normal
+        setTimeout(() => {
+            element.classList.remove('highlight-emerald');
+        }, 3000);
+    }
+}
+
+let recentSearches = []; // Array untuk menyimpan 3 riwayat terakhir
+
+function handleSearch(event) {
+    if (event.key === "Enter") {
+        const input = document.getElementById('paleoSearch');
+        const query = input.value.trim().toLowerCase();
+        
+        if (query) {
+            executeSearch(query); // Jalankan pencarian
+            addHistory(query);    // Tambahkan ke riwayat
+            input.value = "";     // Bersihkan input
+        }
+    }
+}
+
+function addHistory(query) {
+    // 1. Hindari duplikasi dan batasi maksimal 3 item
+    if (!recentSearches.includes(query)) {
+        recentSearches.unshift(query);
+        if (recentSearches.length > 3) recentSearches.pop();
+        renderHistory();
+    }
+}
+
+function renderHistory() {
+    const historyContainer = document.getElementById('searchHistory');
+    historyContainer.innerHTML = ""; // Kosongkan dulu
+
+    recentSearches.forEach(item => {
+        const bullet = document.createElement('button');
+        bullet.className = "history-bullet";
+        bullet.innerText = item.charAt(0).toUpperCase() + item.slice(1);
+        bullet.onclick = () => executeSearch(item); // Klik untuk cari lagi
+        historyContainer.appendChild(bullet);
+    });
+}
+
+function executeSearch(query) {
+    // Logika pengarahan yang sudah kita buat sebelumnya
+    if (query.includes("fosil")) scrollToSection('section-fosil');
+    else if (query.includes("mesozoikum")) scrollToSection('section-mesozoikum');
+    else if (query.includes("ammonite") || query.includes("laut")) scrollToSection('marine-section');
+}
+    </script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="paleo.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>

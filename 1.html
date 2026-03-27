@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMERALD NEXUS | REBIRTH v5.1</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <div id="welcomeScreen">
+        <h1 class="neon-text">EMERALD NEXUS</h1>
+        <div class="loader-container"><div id="progress-bar"></div></div>
+    </div>
+
+    <main id="main-content" style="display: none;">
+        
+        <header class="top-header">
+            <button class="hamburger-btn" id="menuToggle" onclick="toggleSidebar()">
+                <i data-lucide="menu"></i>
+            </button>
+            <div class="header-logo neon-text">v5.1</div>
+        </header>
+
+        <nav id="navSidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h2>Navigator</h2>
+                <button class="close-btn" onclick="toggleSidebar()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" onclick="toggleSidebar()"><i data-lucide="home"></i> Home</a></li>
+                <li><a href="#kepunahan" onclick="toggleSidebar()"><i data-lucide="alert-triangle"></i> Kepunahan</a></li>
+                <li><a href="#paleo" onclick="toggleSidebar()"><i data-lucide="skull"></i> Paleontologi</a></li>
+            </ul>
+        </nav>
+
+        <section class="search-section">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="searchInput" placeholder="Cari Dimensi..." onkeyup="handleSearch()" autocomplete="off">
+                </div>
+                <div id="suggestBox" class="suggestion-box"></div>
+            </div>
+        </section>
+
+        <section id="home" class="glass-card"><h1>Welcome, My King</h1></section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
