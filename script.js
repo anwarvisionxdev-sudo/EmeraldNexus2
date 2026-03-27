@@ -1,14 +1,14 @@
 /**
  * EMERALD NEXUS - UNIFIED CORE SYSTEM
  * Architecture: Anwarhu & Sento Kiriyu
- * Version: 5.1.3 (Layout Stabilized & Thumbnail Optimized)
+ * Version: 5.1.4 (Sound Activated & Logic Stabilized)
  */
 
 // ==========================================
 // --- 1. GLOBAL DATABASE & STATE ---
 // ==========================================
 const playlist = [
-    { name: "snowfall", src: "snowfall.mp3" },
+    { name: "snowfall", src: "snowfall.mp3", cover: "snowfall.jpg" },
 ];
 
 const sectors = [
@@ -24,13 +24,20 @@ const sectors = [
 
 let trackIndex = 0;
 
+// Database Efek Suara (Unified)
+const nexusSfx = {
+    welcome: new Audio('https://assets.mixkit.co/active_storage/sfx/2357/2357-preview.mp3'),
+    click: new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3'),
+    transition: new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3')
+};
+Object.values(nexusSfx).forEach(sfx => sfx.volume = 0.3);
+
 // ==========================================
 // --- 2. CORE INITIALIZER ---
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     console.log("%c 💎 [SYSTEM]: Bootstraping Emerald Core...", "color: #00ff88; font-weight: bold;");
 
-    // Urutan Eksekusi yang Aman & Tidak Merusak Layout
     safeInit(handleWelcomeScreen); 
     safeInit(initNavigation); 
     safeInit(initGlobalListeners);
@@ -47,8 +54,19 @@ function safeInit(fn) {
 }
 
 // ==========================================
-// --- 3. UI & NAVIGATION (Anti-Shift) ---
+// --- 3. UI & NAVIGATION ---
 // ==========================================
+
+function nexusSpeak(message) {
+    if ('speechSynthesis' in window) {
+        const synth = window.speechSynthesis;
+        const utter = new SpeechSynthesisUtterance(message);
+        utter.lang = 'en-US';
+        utter.pitch = 1.2;
+        utter.rate = 1.0;
+        synth.speak(utter);
+    }
+}
 
 function handleWelcomeScreen() {
     const bar = document.getElementById('progress-bar');
@@ -65,16 +83,14 @@ function handleWelcomeScreen() {
             clearInterval(interval);
             setTimeout(() => {
                 welcome.classList.add('fade-out');
-                
-                // --- PERBAIKAN LAYOUT DISINI ---
                 if (mainContent) {
-                    // Gunakan '' agar browser memakai display asli dari CSS (Flex/Grid)
                     mainContent.style.display = ''; 
                     setTimeout(() => mainContent.style.opacity = '1', 50);
                 }
-                
                 setTimeout(() => {
                     welcome.style.display = 'none';
+                    nexusSfx.welcome.play().catch(()=>{});
+                    nexusSpeak("Welcome to Emerald Nexus, Hub Mode Activated");
                     showNotify("System Ready", "Welcome back, Anwarhu");
                 }, 800);
             }, 500);
@@ -89,7 +105,10 @@ function initNavigation() {
 
 window.toggleSidebar = () => {
     const sidebar = document.getElementById('navSidebar');
-    if (sidebar) sidebar.classList.toggle('active');
+    if (sidebar) {
+        sidebar.classList.toggle('active');
+        nexusSfx.transition.play().catch(()=>{});
+    }
 };
 
 function handleSearch() {
@@ -109,6 +128,7 @@ function handleSearch() {
                 div.className = "suggestion-item";
                 div.innerHTML = `<i data-lucide="${item.icon || 'circle'}"></i> <span>${item.name}</span>`;
                 div.onclick = () => {
+                    nexusSfx.click.play().catch(()=>{});
                     if (item.url) window.location.href = item.url;
                     else if (item.id) document.getElementById(item.id).scrollIntoView({ behavior: 'smooth' });
                     input.value = item.name;
@@ -122,7 +142,7 @@ function handleSearch() {
 }
 
 // ==========================================
-// --- 4. AUDIO ENGINE (With Thumbnail Support) ---
+// --- 4. AUDIO ENGINE (Music Player) ---
 // ==========================================
 
 function initMusicPlayer() {
@@ -157,7 +177,6 @@ function loadTrack(index) {
     audio.src = encodeURI(playlist[trackIndex].src);
     if (title) title.innerText = playlist[trackIndex].name;
     
-    // UPDATE THUMBNAIL SMOOTH
     if (thumb) {
         thumb.style.filter = 'blur(5px)';
         thumb.style.opacity = '0.5';
@@ -167,7 +186,6 @@ function loadTrack(index) {
             thumb.style.opacity = '1';
         }, 200);
     }
-    
     localStorage.setItem('em_track', trackIndex);
 }
 
@@ -175,7 +193,10 @@ window.togglePlay = () => {
     const audio = document.getElementById('mainAudio');
     if (!audio) return;
     if (audio.paused) {
-        audio.play().then(() => syncMusicUI(true));
+        audio.play().then(() => {
+            syncMusicUI(true);
+            nexusSpeak("Music opened");
+        });
         localStorage.setItem('em_playing', 'true');
     } else {
         audio.pause();
@@ -188,14 +209,20 @@ window.nextTrack = () => {
     trackIndex = (trackIndex + 1) % playlist.length;
     loadTrack(trackIndex);
     const audio = document.getElementById('mainAudio');
-    audio.play().then(() => syncMusicUI(true));
+    audio.play().then(() => {
+        syncMusicUI(true);
+        nexusSpeak("Playing " + playlist[trackIndex].name);
+    });
 };
 
 window.prevTrack = () => {
     trackIndex = (trackIndex - 1 + playlist.length) % playlist.length;
     loadTrack(trackIndex);
     const audio = document.getElementById('mainAudio');
-    audio.play().then(() => syncMusicUI(true));
+    audio.play().then(() => {
+        syncMusicUI(true);
+        nexusSpeak("Playing " + playlist[trackIndex].name);
+    });
 };
 
 function updateMusicProgress() {
@@ -264,12 +291,10 @@ function syncMusicUI(playing) {
 }
 
 function initGlobalListeners() {
-    const clickSfx = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
-    clickSfx.volume = 0.1;
     document.addEventListener('mousedown', (e) => {
         if (e.target.closest('button, a, .suggestion-item')) {
-            clickSfx.currentTime = 0;
-            clickSfx.play().catch(()=>{});
+            nexusSfx.click.currentTime = 0;
+            nexusSfx.click.play().catch(()=>{});
         }
     });
 }
@@ -277,3 +302,4 @@ function initGlobalListeners() {
 function showNotify(title, msg) {
     console.log(`🔔 [NOTIFY]: ${title} - ${msg}`);
 }
+    
