@@ -103,6 +103,37 @@
     opacity: 0.7;
     font-style: italic;
 }
+
+    /* 1. Animasi Rotasi Planet */
+@keyframes planetRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 2. Animasi Cahaya Berdenyut (Glow Pulse) */
+@keyframes emeraldGlow {
+    0% { box-shadow: 0 0 5px rgba(0, 255, 204, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(0, 255, 204, 0.5); }
+    100% { box-shadow: 0 0 5px rgba(0, 255, 204, 0.2); }
+}
+
+/* 3. Animasi Mengapung (Floating Effect) */
+@keyframes planetFloat {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Implementasi pada Class Gambar Planet */
+.planet-image {
+    animation: planetRotate 20s linear infinite; /* Berputar setiap 20 detik */
+    filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.3));
+}
+
+/* Implementasi pada Card untuk Efek Napas */
+.planet-card {
+    animation: planetFloat 6s ease-in-out infinite, emeraldGlow 4s infinite;
+}
 </style>
 
 <div id="nexusAchievement" class="achievement-notif">
