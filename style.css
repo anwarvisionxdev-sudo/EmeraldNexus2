@@ -257,79 +257,86 @@ body {
             flex-direction: column;
         }
 
-        /* --- CONTAINER UTAMA (THE CORE) --- */
-.search-container {
+        /* CONTAINER UTAMA SEARCH */
+.search-wrapper {
+    width: 100%; max-width: 500px; /* Lebar maksimal di Laptop */
     position: relative;
-    max-width: 500px; /* Sedikit diperlebar agar lebih elegan */
-    
-    /* PERBAIKAN POSISI AGAR TIDAK TERTUTUP HEADER/STATUS */
-    margin: 30px auto; 
-    padding: 0 20px; /* Tambahkan padding agar tidak mepet di HP */
-    
-    z-index: 80; /* Di atas Status Bar (50) tapi tetap di bawah Sidebar (10000) */
 }
 
-/* --- INPUT FIELD (THE DRIVER) --- */
-.search-bar {
-    width: 100%;
-    padding: 12px 20px;
-    font-size: 16px;
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(0, 255, 136, 0.3);
-    border-radius: 15px;
-    outline: none;
+.search-container {
+    position: relative; display: flex; align-items: center;
+    background: rgba(255, 255, 255, 0.03); /* Glassmorphism Hitam Transparan */
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50px; padding: 5px 20px;
     
-    /* Animasi cubic-bezier agar terasa lebih premium */
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    /* PINGGIRAN HIJAU EMERALD TERANG KE GELAP (Sangat Penting) */
+    border: 2px solid;
+    border-image: linear-gradient(to right, #00ff87, #006320) 1;
+    border-radius: 50px; /* Catatan: border-image sering merusak border-radius, ini triknya */
+    
+    /* EFEK MENYALA (GLOW) */
+    box-shadow: 0 0 15px rgba(0, 255, 135, 0.3);
+    transition: 0.3s;
 }
 
-/* Efek saat Input diklik (Authorize!) */
-.search-bar:focus {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: #00ff88;
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
-    transform: translateY(-2px) scale(1.01); /* Sedikit melayang ke atas */
+/* Perbaikan khusus untuk Border-Radius dengan Border-Image */
+.search-container {
+    border: none; /* Hapus border default */
+}
+.search-container::before {
+    content: ""; position: absolute; inset: 0;
+    border-radius: 50px; padding: 2px; /* Tebal Pinggiran */
+    background: linear-gradient(to right, #00ff87, #013214); /* Emerald Bright to Dark */
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
 }
 
-/* --- SUGGESTION BOX (THE DATA PORTAL) --- */
+/* Gaya Input Box */
+#nexus-search {
+    width: 100%; background: transparent; border: none; outline: none;
+    color: white; font-size: 1rem; padding: 12px 15px;
+    letter-spacing: 1px;
+}
+
+#nexus-search::placeholder { color: rgba(255, 255, 255, 0.5); }
+
+/* Gaya Icon Kaca Pembesar */
+.search-icon { color: #00ff87; /* Emerald Terang */ font-size: 1.2rem; }
+
+/* =========================================
+   3. STYLE UNTUK AUTO-SUGGESTION BOX
+   ========================================= */
 .suggestion-box {
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 20px; /* Sesuaikan dengan padding container */
-    right: 20px;
-    background: rgba(10, 25, 15, 0.95);
-    border: 1px solid rgba(0, 255, 136, 0.5);
-    border-radius: 12px;
-    overflow-y: auto; /* Aktifkan scroll jika banyak saran */
-    max-height: 300px; /* Batasi tinggi agar tidak 'bablas' ke bawah */
-    display: none;
-    z-index: 1001;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-    animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute; top: calc(100% + 10px); left: 0; width: 100%;
+    background: rgba(5, 5, 5, 0.95); /* Hitam Hampir Pekat */
+    backdrop-filter: blur(15px); border-radius: 15px;
+    border: 1px solid rgba(0, 255, 135, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-height: 0; overflow: hidden; /* Tersembunyi secara default */
+    transition: max-height 0.4s ease-out, opacity 0.3s;
+    opacity: 0; z-index: 100;
 }
 
-/* --- ITEM SARAN (DATA ENTRIES) --- */
-.suggestion-item {
-    padding: 15px 20px; /* Beri ruang lebih luas */
-    color: #e0e0e0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 12px; /* Jarak untuk ikon nanti */
-    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
-    transition: all 0.2s ease;
+/* Munculkan Suggestion Box */
+.suggestion-box.active { max-height: 300px; overflow-y: auto; opacity: 1; padding: 10px 0; }
+
+/* Gaya Item di Dalam Daftar */
+.suggestion-box div {
+    padding: 12px 25px; color: #ccc; cursor: pointer;
+    transition: 0.2s; font-size: 0.9rem;
+    display: flex; align-items: center; gap: 10px;
 }
 
-.suggestion-item:hover {
-    background: rgba(0, 255, 136, 0.15);
-    color: #00ff88;
-    padding-left: 28px; /* Animasi geser yang halus */
+.suggestion-box div:hover {
+    background: rgba(0, 255, 135, 0.1); color: #00ff87;
+    padding-left: 30px; /* Efek Hover Geser */
 }
+
+/* Scrollbar Style untuk Suggestion Box */
+.suggestion-box::-webkit-scrollbar { width: 5px; }
+.suggestion-box::-webkit-scrollbar-thumb { background: #013214; border-radius: 5px; }
 
 .temporal-widget {
     position: fixed; /* Ubah ke FIXED agar ikut bergerak saat scroll */
