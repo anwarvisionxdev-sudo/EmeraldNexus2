@@ -214,144 +214,43 @@
     <p class="iss-info">Stasiun Luar Angkasa sedang melaju 28,000 km/jam!</p>
 </div>
 
-    <div class="astro-container">
-    <h2 class="astro-title">Sistem Tata Surya: Sekilas & Rinci</h2>
-    
-    <div class="planet-grid">
+   <div class="planet-card" style="
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 15px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    color: #ffffff;
+" onmouseover="this.style.transform='translateY(-10px) scale(1.02)'; this.style.border='1px solid #00ffcc'; this.style.boxShadow='0 15px 30px rgba(0, 255, 204, 0.3)';" 
+  onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.border='1px solid rgba(255, 255, 255, 0.1)'; this.style.boxShadow='none';">
 
-        <div class="planet-card mercury">
-            <div class="planet-image-container">
-                <img src="path/to/mercury_image.png" alt="Merkurius" class="planet-image">
-            </div>
-            <div class="planet-info">
-                <h3 class="planet-name">Merkurius ☿️</h3>
-                <p class="planet-quick-fact">Planet terkecil & terdekat dengan Matahari.</p>
-                <ul class="planet-details">
-                    <li><strong>Tipe:</strong> Terrestrial (Berbatu)</li>
-                    <li><strong>Atmosfer:</strong> Hampir Tidak Ada (Eksosfer)</li>
-                    <li><strong>Suhu:</strong> Ekstrem (-173°C hingga 427°C)</li>
-                    <li><strong>Rotasi:</strong> Sangat Lambat (1 hari ≈ 59 hari Bumi)</li>
-                    <li><strong>Revolusi:</strong> Sangat Cepat (1 tahun ≈ 88 hari Bumi)</li>
-                </ul>
-            </div>
+    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+        <i data-lucide="orbit" style="color: #00ffcc; margin-right: 10px;"></i>
+        <h3 style="margin: 0; font-family: 'Orbitron', sans-serif; letter-spacing: 2px; text-transform: uppercase;">Jupiter</h3>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img src="https://i.ibb.co/hZ7v05X/jupiter.png" alt="Jupiter" style="width: 120px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));">
+    </div>
+
+    <div class="planet-fakta" style="font-size: 0.9rem; line-height: 1.6; color: #a0aec0;">
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 5px 0;">
+            <span>Tipe</span>
+            <span style="color: #00ffcc;">Gas Giant</span>
         </div>
-
-        <div class="planet-card venus">
-            <div class="planet-image-container">
-                <img src="path/to/venus_image.png" alt="Venus" class="planet-image">
-            </div>
-            <div class="planet-info">
-                <h3 class="planet-name">Venus ♀️</h3>
-                <p class="planet-quick-fact">Planet terpanas di Tata Surya.</p>
-                <ul class="planet-details">
-                    <li><strong>Tipe:</strong> Terrestrial (Berbatu)</li>
-                    <li><strong>Atmosfer:</strong> Tebal (CO2), Beracun</li>
-                    <li><strong>Suhu:</strong> Rata-rata 462°C (Efek Rumah Kaca)</li>
-                    <li><strong>Rotasi:</strong> Mundur (Searah Jarum Jam)</li>
-                    <li><strong>Karakteristik:</strong> Gunung Berapi Masif</li>
-                </ul>
-            </div>
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 5px 0;">
+            <span>Massa</span>
+            <span style="color: #00ffcc;">318 Bumi</span>
         </div>
-
-        <div class="planet-card earth">
-            <div class="planet-image-container">
-                <img src="path/to/earth_image.png" alt="Bumi" class="planet-image">
-            </div>
-            <div class="planet-info">
-                <h3 class="planet-name">Bumi 🌍</h3>
-                <p class="planet-quick-fact">Satu-satunya rumah bagi kehidupan yang diketahui.</p>
-                <ul class="planet-details">
-                    <li><strong>Tipe:</strong> Terrestrial (Berbatu)</li>
-                    <li><strong>Atmosfer:</strong> Nitrogen (78%), Oksigen (21%)</li>
-                    <li><strong>Permukaan:</strong> 71% Air Cair</li>
-                    <li><strong>Satelit:</strong> 1 Bulan</li>
-                    <li><strong>Karakteristik:</strong> Aktif Secara Geologis</li>
-                </ul>
-            </div>
+        <div style="padding-top: 10px; font-style: italic;">
+            Badai Great Red Spot telah mengamuk selama lebih dari 350 tahun.
         </div>
-
-        <div class="planet-card mars">
-            <div class="planet-image-container">
-                <img src="path/to/mars_image.png" alt="Mars" class="planet-image">
-            </div>
-            <div class="planet-info">
-                <h3 class="planet-name">Mars ♂️</h3>
-                <p class="planet-quick-fact">Planet Merah dengan gunung berapi terbesar.</p>
-                <ul class="planet-details">
-                    <li><strong>Tipe:</strong> Terrestrial (Berbatu)</li>
-                    <li><strong>Atmosfer:</strong> Sangat Tipis (CO2)</li>
-                    <li><strong>Warna:</strong> Oksida Besi (Karat)</li>
-                    <li><strong>Karakteristik:</strong> Olympus Mons, Valles Marineris</li>
-                    <li><strong>Satelit:</strong> 2 Bulan Kecil</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="planet-card jupiter">
-            <div class="planet-image-container">
-                <img src="path/to/jupiter_image.png" alt="Jupiter" class="planet-image">
-            </div>
-            <div class="planet-info">
-                <h3 class="planet-name">Jupiter ♃️</h3>
-                <p class="planet-quick-fact">Planet terbesar & Raja para Raksasa.</p>
-                <ul class="planet-details">
-                    <li><strong>Tipe:</strong> Jovian (Raksasa Gas)</li>
-                    <li><strong>Atmosfer:</strong> Hidrogen, Helium</li>
-                    <li><strong>Karakteristik:</strong> Great Red Spot (Badai Abadi)</li>
-                    <li><strong>Rotasi:</strong> Tercepat (1 hari ≈ 10 jam Bumi)</li>
-                    <li><strong>Satelit:</strong> 95+ Bulan</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="planet-card saturn">
-            <div class="planet-image-container">
-                <img src="path/to/saturn_image.png" alt="Saturnus" class="planet-image">
-            </div>
-            <div class="planet-info">
-                <h3 class="planet-name">Saturnus ♄️</h3>
-                <p class="planet-quick-fact">Dikenal dengan sistem cincin es yang megah.</p>
-                <ul class="planet-details">
-                    <li><strong>Tipe:</strong> Jovian (Raksasa Gas)</li>
-                    <li><strong>Atmosfer:</strong> Hidrogen, Helium</li>
-                    <li><strong>Kepadatan:</strong> Kurang dari Air (Bisa Mengapung)</li>
-                    <li><strong>Satelit:</strong> 146+ Bulan (Termasuk Titan)</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="planet-card uranus">
-            <div class="planet-image-container">
-                <img src="path/to/uranus_image.png" alt="Uranus" class="planet-image">
-            </div>
-            <div class="planet-info">
-                <h3 class="planet-name">Uranus ⛢️</h3>
-                <p class="planet-quick-fact">Raksasa Es yang berotasi pada sisinya.</p>
-                <ul class="planet-details">
-                    <li><strong>Tipe:</strong> Jovian (Raksasa Es)</li>
-                    <li><strong>Warna:</strong> Biru-Hijau (Metana)</li>
-                    <li><strong>Atmosfer:</strong> Terdingin (-224°C)</li>
-                    <li><strong>Rotasi:</strong> Miring 98 Derajat</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="planet-card neptune">
-            <div class="planet-image-container">
-                <img src="path/to/neptune_image.png" alt="Neptunus" class="planet-image">
-            </div>
-            <div class="planet-info">
-                <h3 class="planet-name">Neptunus ♆️</h3>
-                <p class="planet-quick-fact">Planet terjauh dengan angin terkencang.</p>
-                <ul class="planet-details">
-                    <li><strong>Tipe:</strong> Jovian (Raksasa Es)</li>
-                    <li><strong>Warna:</strong> Biru Tua (Metana)</li>
-                    <li><strong>Karakteristik:</strong> Angin Supersonik (2.100 km/jam)</li>
-                    <li><strong>Satelit:</strong> 16 Bulan (Triton Orbit Mundur)</li>
-                </ul>
-            </div>
-        </div>
-
     </div>
 </div>
 </section>
