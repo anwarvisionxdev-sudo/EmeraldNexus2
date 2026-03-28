@@ -44,12 +44,7 @@
 </nav>
 
     <main>
-        <div class="search-container">
-            <input type="text" class="search-bar" id="searchInput" placeholder="Search Emerald Nexus..." onkeyup="handleSearch()">
-            <div class="suggestion-box" id="suggestBox"></div>
-        </div>
-
-        <div class="temporal-widget">
+    <div class="temporal-widget">
     <div id="live-clock">00:00:00</div>
     <div id="live-date">Loading Temporal Data...</div>
 </div>
@@ -63,6 +58,19 @@
     </div>
 </div>
 
+<div class="search-wrapper">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            
+            <input type="text" id="nexus-search" placeholder="Jelajahi Alam Semesta Purba..." autocomplete="off">
+            
+            <div class="lds-dual-ring" id="search-loader"></div>
+        </div>
+        
+        <div class="suggestion-box" id="suggestion-box">
+            </div>
+    </div>
+        
 <div id="scannerLine" class="scanner-line"></div>
 
 <div id="notification-area" style="position: fixed; bottom: 220px; right: 30px; z-index: 1000; display: flex; flex-direction: column; gap: 10px;"></div>
