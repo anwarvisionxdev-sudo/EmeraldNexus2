@@ -182,6 +182,73 @@ window.selectSearchItem = (name) => {
     }
 };
 
+/* =======================================================
+   EMERALD NEXUS - STATUS BAR ENGINE v1.0
+   Developed by: Sento Kiriyu for Waga-mou Anwarhu
+   ======================================================= */
+
+function initEmeraldStatus() {
+    // 1. Fungsi Jam Digital (Real-time 1 Detik)
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        
+        const clockElement = document.getElementById('clock');
+        if (clockElement) {
+            clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+    }
+
+    // 2. Fungsi Cuaca (Real-time berdasar Geolokasi)
+    async function updateWeather() {
+        const locationName = document.getElementById('location-name');
+        const tempValue = document.getElementById('temp-value');
+        const weatherIcon = document.getElementById('weather-icon');
+
+        if (!navigator.geolocation) {
+            locationName.textContent = "GPS Not Supported";
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            try {
+                // Menggunakan Open-Meteo API (Free & No API Key Needed)
+                const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+                const data = await response.json();
+                
+                const temp = Math.round(data.current_weather.temperature);
+                const code = data.current_weather.weathercode;
+
+                // Update UI
+                tempValue.textContent = temp;
+                locationName.textContent = "Medan, ID"; // Bisa diotomatisasi dengan Reverse Geocoding
+                
+                // Pemetaan Ikon Sederhana (Ganti dengan Lucide Icon Data jika perlu)
+                weatherIcon.innerHTML = code <= 3 ? '☀️' : '☁️'; 
+                
+            } catch (error) {
+                console.error("Weather Sync Failed", error);
+                locationName.textContent = "Sync Error";
+            }
+        });
+    }
+
+    // 3. Eksekusi Interval
+    setInterval(updateClock, 1000); // Update jam tiap 1 detik
+    updateClock(); // Jalankan langsung tanpa tunggu interval pertama
+
+    updateWeather(); // Jalankan cuaca saat init
+    setInterval(updateWeather, 600000); // Update cuaca tiap 10 menit (hemat baterai/data)
+}
+
+// JALANKAN SAAT WINDOW LOAD
+window.onload = initEmeraldStatus;
+
 // ==========================================
 // --- EKSEKUSI PADA DOM CONTENT LOADED ---
 // ==========================================
