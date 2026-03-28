@@ -11,15 +11,17 @@ const playlist = [
     { name: "snowfall", src: "snowfall.mp3", cover: "snowfall.webp" },
 ];
 
-const sectors = [
-    { name: 'HUB / MAIN', url: 'Modern-X.HTML', icon: 'layout-grid' },
-    { name: 'ADMIN DASHBOARD', url: 'admin.html', icon: 'settings' },
-    { name: 'PALEONTOLOGY', url: 'paleo.html', icon: 'skull' },
-    { name: 'ZOOLOGY', url: 'zoo.html', icon: 'paw-print' },
-    { name: 'AQUATIC', url: 'aqua.html', icon: 'waves' },
-    { name: 'ASTRONOMY', url: 'astro.html', icon: 'orbit' },
-    { name: 'GALAXY', url: 'galaxy.html', icon: 'milky-way' },
-    { name: 'KEPUNAHAN MASSAL', id: 'kepunahan', icon: 'alert-triangle' }
+// 1. DATA DATABASE PALSU (Sesuai Kategori Nexus Anda)
+const universeDatabase = [
+    { name: "Tyrannosaurus Rex", category: "Paleo-Dino", icon: "fa-dragon" },
+    { name: "Megalodon", category: "Sea Creatures", icon: "fa-fish" },
+    { name: "Milky Way Galaxy", category: "Galaxy", icon: "fa-meteor" },
+    { name: "Paleozoic Era Timeline", category: "Timeline", icon: "fa-hourglass-half" },
+    { name: "Cyanobacteria", category: "Micobacteria", icon: "fa-microscope" },
+    { name: "Proxima Centauri", category: "Astronomy", icon: "fa-star" },
+    { name: "Triceratops Fossil", category: "Fossils", icon: "fa-bone" },
+    { name: "Ancient Ferns", category: "Paleo-Botany", icon: "fa-leaf" },
+    { name: "Marine Reptiles", category: "Marine Life", icon: "fa-water" }
 ];
 
 let trackIndex = 0;
@@ -41,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     safeInit(handleWelcomeScreen); 
     safeInit(initNavigation); 
     safeInit(initGlobalListeners);
+    safeInit(initNavigationSearch);
     safeInit(initMusicPlayer);
     safeInit(initEnvironmentalSensors);
     safeInit(initPerformanceMonitor);
@@ -111,35 +114,80 @@ window.toggleSidebar = () => {
     }
 };
 
-function handleSearch() {
-    const input = document.getElementById('searchInput');
-    const suggestBox = document.getElementById('suggestBox');
-    if (!input || !suggestBox) return;
+function initNavigationSearch() {
+    // 1. Inisialisasi Elemen Internal
+    const searchInput = document.getElementById('nexus-search');
+    const suggestionBox = document.getElementById('suggestion-box');
+    
+    // Proteksi: Jika elemen tidak ditemukan, hentikan sirkuit agar tidak error
+    if (!searchInput || !suggestionBox) {
+        console.warn("⚠️ [SEARCH]: Required elements not found. Skipping init.");
+        return;
+    }
 
-    const query = input.value.toLowerCase();
-    suggestBox.innerHTML = ''; 
-
-    if (query.length > 0) {
-        const matches = sectors.filter(s => s.name.toLowerCase().includes(query));
-        if (matches.length > 0) {
-            suggestBox.style.display = 'block';
-            matches.forEach(item => {
-                const div = document.createElement('div');
-                div.className = "suggestion-item";
-                div.innerHTML = `<i data-lucide="${item.icon || 'circle'}"></i> <span>${item.name}</span>`;
-                div.onclick = () => {
-                    nexusSfx.click.play().catch(()=>{});
-                    if (item.url) window.location.href = item.url;
-                    else if (item.id) document.getElementById(item.id).scrollIntoView({ behavior: 'smooth' });
-                    input.value = item.name;
-                    suggestBox.style.display = 'none';
-                };
-                suggestBox.appendChild(div);
+    // 2. Event Listener untuk Input User
+    searchInput.addEventListener('input', (e) => {
+        let userData = e.target.value; 
+        let filteredArray = [];
+        
+        if (userData) {
+            // Filter data dari database (Pastikan universeDatabase sudah ada secara global)
+            filteredArray = universeDatabase.filter((data) => {
+                return data.name.toLowerCase().includes(userData.toLowerCase());
             });
-            if (window.lucide) lucide.createIcons();
-        } else { suggestBox.style.display = 'none'; }
-    } else { suggestBox.style.display = 'none'; }
+
+            // Mapping Data menjadi Template HTML
+            const htmlList = filteredArray.map((data) => {
+                // Menambahkan fungsi 'onclick' secara langsung di template string
+                return `<div class="suggestion-item" onclick="selectSearchItem('${data.name}')">
+                            <i class="fas ${data.icon || 'fa-star'}" style="color: #00d2ff; width: 20px;"></i>
+                            <span>${data.name}</span>
+                            <small style="color: #00ff88; margin-left: auto; opacity: 0.7;">${data.category}</small>
+                        </div>`;
+            });
+
+            suggestionBox.classList.add("active"); 
+            renderSuggestions(htmlList, userData);
+        } else {
+            suggestionBox.classList.remove("active");
+        }
+    });
+
+    // 3. Fungsi Internal untuk Merender (Local Function)
+    function renderSuggestions(list, query) {
+        if (!list.length) {
+            suggestionBox.innerHTML = `<div class="no-result"><i class="fas fa-exclamation-triangle"></i> No results for '${query}'</div>`;
+        } else {
+            suggestionBox.innerHTML = list.join('');
+        }
+    }
 }
+
+/**
+ * 4. FUNGSI GLOBAL UNTUK MEMILIH ITEM
+ * (Dibuat global agar bisa diakses oleh atribut 'onclick' dari HTML string)
+ */
+window.selectSearchItem = (name) => {
+    const input = document.getElementById('nexus-search');
+    const box = document.getElementById('suggestion-box');
+    
+    if (input && box) {
+        input.value = name;
+        box.classList.remove("active");
+        
+        // Bonus: Suara Konfirmasi (Smart Brain Style)
+        if (typeof nexusSpeak === 'function') {
+            nexusSpeak(`Accessing ${name}`);
+        }
+    }
+};
+
+// ==========================================
+// --- EKSEKUSI PADA DOM CONTENT LOADED ---
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    safeInit(initNavigationSearch); // Memanggil fungsi init yang baru!
+});
 
 // ==========================================
 // --- 4. AUDIO ENGINE (Music Player) ---
